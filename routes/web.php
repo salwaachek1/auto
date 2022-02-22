@@ -37,3 +37,6 @@ Route::post('/user/delete/{id}', 'UserController@showModalToDelete');
 Route::post('/destroy-user/{id}', 'UserController@delete');
 Route::post('/user/edit/{id}', 'UserController@showModalToUpdate');
 Route::post('/edit-user', 'UserController@update');
+
+// activity management
+Route::get('/activities', 'ActivityController@index');

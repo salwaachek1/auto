@@ -16,7 +16,7 @@ class CarController extends Controller
     {     
         $carburants = Carburant::get();    
         $cars = Car::get();    
-        return view('admin.carslist')->with(['carburants' => $carburants,'cars'=>$cars,'name' => 'Gestion voiture']);
+        return view('admin.carslist')->with(['carburants' => $carburants,'cars'=>$cars]);
     }
 
   public function create(CarStoreRequest $request,$type_request)
@@ -93,17 +93,21 @@ class CarController extends Controller
        $carburants=Carburant::all();
        $default_carb=Car::find($id)->carburant->name;
        $str_carb="<option value='".$car[0]->carburant_id."'>".$default_carb."</option>";
+       $op_occ="<option value='1'>disponible</option>";
+       $op_dis="<option value='0'>occupée</option>";
        if($car[0]->is_dispo==1){
-        $str_dispo="<option value='1'>disponible</option><option value='0'>occupée</option>";
+        $str_dispo=$op_occ.$op_dis;
        }
        else{
-           $str_dispo="<option value='0'>occupée</option><option value='1'>disponible</option>";
+           $str_dispo=$op_dis.$op_occ;
        }
+       $op_mer="<option value='1'>En marche</option>";
+       $op_pan="<option value='0'>En panne</option>";
        if($car[0]->is_working==1){
-        $str_state="<option value='1'>En marche</option><option value='0'>En panne</option>";
+        $str_state=$op_mer.$op_pan;
        }
        else{
-           $str_state="<option value='0'>En panne</option><option value='1'>En marche</option>";
+           $str_state=$op_pan.$op_mer;
        }
       
        foreach($carburants as $carb){

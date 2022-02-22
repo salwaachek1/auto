@@ -15,4 +15,8 @@ class Car extends Model
     {
         return $this->belongsTo('App\Carburant');
     }
+    public function activity()
+    {
+        return $this->hasOne('App\Activity');
+    }
 }

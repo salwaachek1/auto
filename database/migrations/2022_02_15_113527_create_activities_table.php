@@ -16,6 +16,22 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->tinyInteger('is_done');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); 
+            $table->bigInteger('car_id')->unsigned();
+            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade'); 
+            $table->text('before_photo_url');
+            $table->text('after_photo_url');
+            $table->integer('before_kilos');
+            $table->integer('after_kilos');
+            $table->float('expenses');
+            $table->integer('fuel');
+            $table->integer('previous_fuel_amount');
+            $table->integer('after_fuel_amount');
+            $table->text('destination');
+            $table->date('returning_date');
+                
         });
     }
 
