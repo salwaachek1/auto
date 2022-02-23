@@ -41,5 +41,10 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Activity');
     }
+
+    public function activities()
+    {
+        return $this->belongsToMany(Car::class, 'activities','user_id','car_id');
+    }
     
 }

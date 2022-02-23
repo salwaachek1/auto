@@ -15,8 +15,8 @@ class Car extends Model
     {
         return $this->belongsTo('App\Carburant');
     }
-    public function activity()
+    public function users()
     {
-        return $this->hasOne('App\Activity');
+        return $this->belongsToMany(User::class, 'activities','car_id','user_id');
     }
 }
