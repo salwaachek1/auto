@@ -16,7 +16,7 @@ class IsDriver
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->role_id == 2) {
+        if (auth()->user()->role_id== 2) {
              return $next($request);
         }
 
