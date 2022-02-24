@@ -22,15 +22,15 @@ class CreateActivitiesTable extends Migration
             $table->bigInteger('car_id')->unsigned();
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade'); 
             $table->text('before_photo_url');
-            $table->text('after_photo_url');
+            $table->text('after_photo_url')->nullable();
             $table->integer('before_kilos');
-            $table->integer('after_kilos');
-            $table->float('expenses');
-            $table->integer('fuel');
+            $table->integer('after_kilos')->nullable();
+            $table->float('expenses')->nullable();
+            $table->integer('fuel')->nullable();
             $table->integer('previous_fuel_amount');
-            $table->integer('after_fuel_amount');
+            $table->integer('after_fuel_amount')->nullable();
             $table->text('destination');
-            $table->date('returning_date');
+            $table->date('returning_date')->nullable();
                 
         });
     }

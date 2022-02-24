@@ -13,6 +13,9 @@ trait ImageTrait {
             else if($type=="car"){
                 $path = $request->file('images')->storeAs('/images/', $fileNameToStore, 'public');
             }
+            else if($type=="activity"){
+                $path = $request->file('images')->storeAs('/activities/', $fileNameToStore, 'public');
+            }
             return $fileNameToStore;
   }  
 }

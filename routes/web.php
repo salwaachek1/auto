@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
+Route::group(['middleware' => ['admin']], function () {
 // cars management
 Route::get('/cars', 'CarController@index');
 Route::post('/add-car/{type_request}', 'CarController@create');
@@ -37,6 +37,8 @@ Route::post('/user/delete/{id}', 'UserController@showModalToDelete');
 Route::post('/destroy-user/{id}', 'UserController@delete');
 Route::post('/user/edit/{id}', 'UserController@showModalToUpdate');
 Route::post('/edit-user', 'UserController@update');
-
+});
 // activity management
 Route::get('/activities', 'ActivityController@index');
+Route::post('/add-activity/{type_request}', 'ActivityController@create');
+Route::post('/activity/details/{id}', 'ActivityController@showModalDetails');

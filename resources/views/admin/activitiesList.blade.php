@@ -20,7 +20,68 @@
   margin: auto;
 }
 </style>
+<button type="button" class="popup-with-form btn btn-block btn-primary btn-rounded" data-toggle="modal" data-target="#newAct" >Lancer une activité</button>
+<div id="newAct" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newAct" aria-hidden="true">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+           <div class="modal-header">
+                    <h4 class="modal-title">Commencer une activité</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+            <div class="modal-body">
+                <form  method="post" enctype="multipart/form-data" class="floating-labels" action="/add-activity/create" >
+                    @csrf
+                    <fieldset style="border:0;">
+                        <div class="form-group m-b-40">
+                            <label for="car_id">Voiture</label>
+                            <select class="form-control p-0"  name="car_id" required="">      
+                                @foreach($cars as $car)                     
+                                <option value="{{$car->id}}">{{$car->model}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group m-b-40">
+                            <label for="before_kilos">Kilométrage initial</label>
+                            <input type="text" class="form-control" name="before_kilos"   >
+                        </div>
+                         <div class="form-group m-b-40">
+                            <label for="destination">Destination</label>
+                            <input type="text" class="form-control" name="destination"   >
+                        </div>
+                        <div class="form-group m-b-40">
+                            <label for="previous_fuel_amount">Carburant initiale</label>
+                            <input type="text" class="form-control" name="previous_fuel_amount"   >
+                        </div> 
+                         
+                        <div class="form-group m-b-40">
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly>
+                                    <div class="input-group-btn">
+                            
+                                        <span class="fileUpload btn btn-info">
+                                            <span class="upl" id="upload">Importer l'image des kilos initiales</span>
+                                            <input type="file" class="upload up" id="images" name="images" onchange="readURL(this);" />
+                                        </span><!-- btn-orange -->
+                                    </div><!-- btn -->
+                             </div><!-- group -->
+                        </div><!-- form-group -->
+                        <br><br><br>
+                        <div class="images-preview-div"> </div>
+                        <div class="form-group m-b-40">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Sauvgarder</button>
+                            <button type="reset" data-dismiss="modal" class="btn btn-inverse waves-effect waves-light">Annuler</button>
+                        </div>
+                    </fieldset>
+                </form>
+                <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script >
 
+</script>
+
+            </div>
+        </div>
+    </div>
+</div>
    
 <br><br>
 @if (\Session::has('message'))
@@ -55,17 +116,33 @@
                 <td>{{$act->car->model}} </td>
                 <td>{{$act->user->name}}</td>
                 <td>{{$act->before_kilos}}</td>
+                @if($act->after_kilos==null)
+                <td> -- </td>
+                @else
                 <td>{{$act->after_kilos}}</td>
+                @endif
+                @if($act->expenses==null)
+                <td>--</td>
+                @else
                 <td>{{$act->expenses}}</td>
+                @endif
+                @if($act->fuel==null)
+                <td>--</td>
+                @else
                 <td>{{$act->fuel}}</td>
+                @endif
                 <td>{{$act->destination}}</td>
+                @if($act->returning_date==null)
+                <td> <i class="fas fa-road"></i></td>
+                @else
                 <td>{{$act->returning_date}}</td>
+                @endif
                 <td class="text-nowrap">
-                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='act'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
+                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
-                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='act'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
                     |
-                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='act'  data-url='detail' class='DetailModalBtn'> <i class="fas fa-eye text-primary"></i> </a>
+                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='details' class='DetailModalBtn'> <i class="fas fa-eye text-primary"></i> </a>
                 </td>
             </tr>
             @endforeach
@@ -75,7 +152,7 @@
     
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Activité</h4>

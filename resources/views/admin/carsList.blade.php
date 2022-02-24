@@ -22,7 +22,7 @@
 </style>
 <button type="button" class="popup-with-form btn btn-block btn-primary btn-rounded" data-toggle="modal" data-target="#newCar" >Ajouter Voiture</button>
 <div id="newCar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newAct" aria-hidden="true">
-    <div class="modal-dialog" >
+    <div class="modal-dialog modal-lg" >
         <div class="modal-content">
            <div class="modal-header">
                     <h4 class="modal-title">Ajouter voiture</h4>
@@ -150,7 +150,7 @@
     
 <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Gestion voiture</h4>
