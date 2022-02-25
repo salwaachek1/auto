@@ -236,10 +236,10 @@ max-width: 100px;
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('storage/users/'Auth::user()->photo_url) }}" class="img-circle elevation-2" alt="User Image" >
         </div>
         <div class="info">
-          <a href="#" class="d-block">Admin</a>
+          <a href="#" class="d-block">{{Auth::user()->name}}</a>
         </div>
       </div>
 
@@ -257,30 +257,39 @@ max-width: 100px;
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth::user()->role_id=="1" )
               <li class="nav-item">
-                <a href="/cars" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="/cars" class="nav-link ">
+                  <i class="fas fa-car nav-icon"></i>
                   <p>Gestion Voitures</p>
                 </a>
               </li>
                <li class="nav-item">
-                <a href="/accounts" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="/users" class="nav-link ">
+                  <i class="fas fa-user nav-icon"></i>
                   <p>Gestion Comptes</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="./activities" class="nav-link">
+                  <i class="fas fa-road nav-icon"></i>
                   <p>Gestion Activités</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="./reparations" class="nav-link">
+                  <i class="fas fa-wrench nav-icon"></i>
                   <p>Gestion Réparations</p>
                 </a>
               </li>
+              @else
+               <li class="nav-item">
+                <a href="./activities" class="nav-link">
+                  <i class="fas fa-road nav-icon"></i>
+                  <p>Gestion Activités</p>
+                </a>
+              </li>
+              @endif
             </ul>
           </li>
         </ul>
@@ -321,7 +330,7 @@ max-width: 100px;
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  <footer class="main-footer" style="position: fixed;bottom: 0;width: 100%;">
     <strong>Copyright &copy; 2022 Haifer.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
