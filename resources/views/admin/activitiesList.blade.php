@@ -19,6 +19,14 @@
   width: 75%;
   margin: auto;
 }
+.table-responsive{
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+}    
+
 </style>
 <button type="button" class="popup-with-form btn btn-block btn-primary btn-rounded" data-toggle="modal" data-target="#newAct" >Lancer une activité</button>
 <div id="newAct" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newAct" aria-hidden="true">
@@ -93,8 +101,8 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
-
-            <table  class="table table-striped table-bordered" style="width:100%">
+            
+            <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
                 <thead>
                     <tr>
                         <th>Voiture</th>
@@ -113,31 +121,31 @@
 
             @foreach ($activities as $act)
             <tr>
-                <td>{{$act->car->model}} </td>
-                <td>{{$act->user->name}}</td>
-                <td>{{$act->before_kilos}}</td>
+                <td data-th="Voiture">{{$act->car->model}} </td>
+                <td data-th="Chauffeur">{{$act->user->name}}</td>
+                <td data-th="Kilométrage initial">{{$act->before_kilos}}</td>
                 @if($act->after_kilos==null)
-                <td> -- </td>
+                <td data-th="Kilométrage"> -- </td>
                 @else
-                <td>{{$act->after_kilos}}</td>
+                <td data-th="Kilométrage">{{$act->after_kilos}}</td>
                 @endif
                 @if($act->expenses==null)
-                <td>--</td>
+                <td data-th="Dépenses">--</td>
                 @else
-                <td>{{$act->expenses}}</td>
+                <td data-th="Dépenses">{{$act->expenses}}</td>
                 @endif
                 @if($act->fuel==null)
-                <td>--</td>
+                <td data-th="Carburant acheté">--</td>
                 @else
-                <td>{{$act->fuel}}</td>
+                <td data-th="Carburant acheté">{{$act->fuel}}</td>
                 @endif
-                <td>{{$act->destination}}</td>
+                <td data-th="Destination">{{$act->destination}}</td>
                 @if($act->returning_date==null)
-                <td> <i class="fas fa-road"></i></td>
+                <td data-th="Retour"> <i class="fas fa-road"></i></td>
                 @else
-                <td>{{$act->returning_date}}</td>
+                <td data-th="Retour">{{$act->returning_date}}</td>
                 @endif
-                <td class="text-nowrap">
+                <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>

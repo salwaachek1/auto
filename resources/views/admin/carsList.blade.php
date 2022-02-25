@@ -102,7 +102,7 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
-            <table  class="table table-striped table-bordered" style="width:100%">
+            <table  class="table table-striped table-bordered" style="width:100%" id="customDataTable" >
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -121,23 +121,23 @@
 
             @foreach ($cars as $car)
             <tr>
-                <td> <img src="{{ asset('storage/images/'.$car->photo_url) }}" style="height:50px;width:50px" > </td>
-                <td>{{$car->model}}</td>
-                <td>{{$car->serial_number}}</td>
-                <td>{{$car->place}}</td>
-                <td>{{$car->carburant->name}}</td>
-                <td>{{$car->kilo}}</td>  
+                <td data-th="Image"> <img src="{{ asset('storage/images/'.$car->photo_url) }}" style="height:50px;width:50px" > </td>
+                <td data-th="Modèle">{{$car->model}}</td>
+                <td data-th="Matricule">{{$car->serial_number}}</td>
+                <td data-th="Lieu">{{$car->place}}</td>
+                <td data-th="Carburant">{{$car->carburant->name}}</td>
+                <td data-th="Kilo">{{$car->kilo}}</td>  
                 @if($car->is_dispo==1)
-                <td>Disponible</td> 
+                <td data-th="Disponibilité">Disponible</td> 
                 @else
-                <td>Occupée</td> 
+                <td data-th="Disponibilité">Occupée</td> 
                 @endif
                 @if($car->is_working==1)
-                <td>Bonne état</td> 
+                <td data-th="Etat">Bonne état</td> 
                 @else
-                <td>En panne</td> 
+                <td data-th="Etat">En panne</td> 
                 @endif
-                <td class="text-nowrap">
+                <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='edit' data-entity='car' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='delete' data-entity='car' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>

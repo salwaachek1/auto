@@ -31,7 +31,40 @@
     <!-- <link rel="stylesheet" href="{{ URL::asset('css/style.css')}}"> -->
 </head>
 <style>
-   
+ @media screen and (max-width: 640px) {
+  table#customDataTable caption {
+    background-image: none;
+  }
+  table#customDataTable thead {
+    display: none;
+  }
+  table#customDataTable tbody td {
+    display: block;
+    padding: .6rem;
+  }
+  table#customDataTable tbody tr td:first-child {
+    background: #666;
+    color: #fff;
+  }
+  table#customDataTable tbody tr td:first-child a {
+    color: #fff;
+  }
+  table#customDataTable tbody tr td:first-child:before {
+    color: rgb(225, 181, 71);
+  }
+  table#customDataTable tbody td:before {
+    content: attr(data-th);
+    font-weight: bold;
+    display: inline-block;
+    width: 10rem;
+  }
+  table#customDataTable tr th:last-child,
+  table#customDataTable tr td:last-child {
+    max-width: 100% !important;
+    min-width: 100px !important;
+    width: 100% !important;
+  }
+}  
 .it .btn-orange
 {
   background-color: blue;
@@ -309,10 +342,6 @@ max-width: 100px;
             <h1 class="m-0">Dashboard</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

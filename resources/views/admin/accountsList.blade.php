@@ -87,7 +87,7 @@
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
 
-            <table  class="table table-striped table-bordered" style="width:100%">
+            <table  class="table table-striped table-bordered" id="customDataTable"  style="width:100%">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -102,11 +102,11 @@
 
             @foreach ($users as $user)
             <tr>
-                <td> <img src="{{ asset('storage/users/'.$user->photo_url) }}" style="height:50px;width:50px" > </td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->created_at}}</td>
-                <td class="text-nowrap">
+                <td data-th="Image"> <img src="{{ asset('storage/users/'.$user->photo_url) }}" style="height:50px;width:50px" > </td>
+                <td data-th="Nom">{{$user->name}}</td>
+                <td data-th="Email">{{$user->email}}</td>
+                <td data-th="Date création">{{$user->created_at}}</td>
+                <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$user->id}}' data-entity='user'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
                     <a href="javascript:void(0)" data-id='{{$user->id}}' data-entity='user'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>

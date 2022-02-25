@@ -62,7 +62,7 @@ class ActivityController extends Controller
         if($act->after_fuel_amount!=null){
             $fuel=$act->after_fuel_amount;
         }
-        $retStr= '  <table  class="table table-striped table-bordered" style="width:100%">
+        $retStr= '  <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
                 <thead>
                     <tr>
                         <th>Photo initiale</th>
@@ -73,10 +73,10 @@ class ActivityController extends Controller
                 </thead>
                 <tbody>
             <tr>
-                <td><img src="storage/activities/'.$act->before_photo_url.'") " style="height:50px;width:50px" ></td>
-                <td><img src="storage/activities/'.$photo.'" style="height:50px;width:50px" ></td>
-                <td>'.$act->previous_fuel_amount.'</td>
-                <td>'.$fuel.'</td>
+                <td data-th="Photo initiale"><img src="storage/activities/'.$act->before_photo_url.'") " style="height:50px;width:50px" ></td>
+                <td data-th="Photo actuelle"><img src="storage/activities/'.$photo.'" style="height:50px;width:50px" ></td>
+                <td data-th="Carburant initial">'.$act->previous_fuel_amount.'</td>
+                <td data-th="Carburant laissé">'.$fuel.'</td>
             </tr>
         </tbody>
 
