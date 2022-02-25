@@ -15,10 +15,10 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->role == 1) {
+        if (Auth::user() &&  Auth::user()->role_id == 1) {
              return $next($request);
         }
 
-        return redirect('/welcome')->with('error','You have not admin access');
+        return redirect('/welcome')->with('message','Vous n\'avez pas accès !');
     }
 }

@@ -76,6 +76,11 @@
             @endif
 
             <div class="content">
+                @if (\Session::has('message'))
+                    <div class="alert alert-success" role="alert" style="width:100%;text-align:center;color:red;font-size:20px;">
+                    {!! \Session::get('message') !!}
+                    </div>
+                @endif
                 <div class="title m-b-md">
                     Parc Auto
                 </div>

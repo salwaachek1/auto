@@ -16,10 +16,11 @@ class IsDriver
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->role_id== 2) {
+        if (Auth::user() &&  Auth::user()->role_id == 2 || Auth::user()->role_id ==1) {
              return $next($request);
         }
 
-        return redirect('/aaa')->with('error','You have not driver access');
+
+        return redirect('/welcome')->with('message','Vous n\'avez pas accès !');
     }
 }
