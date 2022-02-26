@@ -147,10 +147,10 @@ previewImages(this, "div.images-preview-div-3");
     public function delete($id)
     {
       $user=User::where('id',$id)->get(); 
-      $image_path = "storage/users/".$user[0]->photo_url;  
-       if(File::exists($image_path)&&($image_path!="user.png")) {
-            File::delete($image_path);
-        }
+      $path= $car[0]->photo_url;
+      $type="users";
+      $default="user.png";
+      $this->imageDeleting($path,$type,$default);
       $user=User::where('id',$id)->delete();  
       return redirect('/users')->with('message', Config::get('constants.sucessful_delete')); 
          

@@ -77,10 +77,10 @@ class CarController extends Controller
     public function delete($id)
     {
       $car= Car::where('id',$id)->get(); 
-      $image_path = "storage/images/".$car[0]->photo_url;  
-        if(File::exists($image_path)&&($image_path!="noimage.jpg")) {
-            File::delete($image_path);
-        }
+      $path= $car[0]->photo_url;
+      $type="images";
+      $default="noimage.jpg";
+      $this->imageDeleting($path,$type,$default);  
       $car=Car::where('id',$id)->delete();  
       return redirect('/cars')->with('message', Config::get('constants.sucessful_delete')); 
          

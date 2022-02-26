@@ -50,4 +50,6 @@ Route::group(['middleware' => ['driver']], function () {
 Route::get('/activities', 'ActivityController@index');
 Route::post('/add-activity/{type_request}', 'ActivityController@create');
 Route::post('/activity/details/{id}', 'ActivityController@showModalDetails');
+Route::post('/activity/delete/{id}', 'ActivityController@showModalToDelete');
+Route::post('/destroy-activity/{id}', 'ActivityController@delete');
 });

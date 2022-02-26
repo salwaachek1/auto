@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Traits;
-
+use Illuminate\Support\Facades\File;
 trait ImageTrait {
     public function imageStoring($request,$type){
             $filenameWithExt = $request->file('images')->getClientOriginalName();
@@ -18,5 +18,14 @@ trait ImageTrait {
             }
             return $fileNameToStore;
   }  
+  public function imageDeleting($path,$type,$default){
+
+        $image_path = "storage/".$type.'/'.$path;
+        if(File::exists($image_path)&&($image_path!=$default)) {
+            File::delete($image_path);
+        }
+        return true;
+       
+  }
 }
 ?>

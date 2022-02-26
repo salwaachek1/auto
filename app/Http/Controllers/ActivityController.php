@@ -84,5 +84,35 @@ class ActivityController extends Controller
         return $retStr;
     }
     
+    public function showModalToDelete($id)
+    {
+        $act =  Activity::where('id',$id)->get();
+        $retStr= ' voulez vous vraiment supprimer l\'activité d\'#ID '. $act[0]->id.' ?
+        <form  method="post" action="/destroy-activity/'.$act[0]->id.'" class="floating-labels">
+    <fieldset style="border:0;">
+    <input type="hidden" name="id" value="' . $act[0]->id . '" />
+    <input type="hidden" name="_token" value="' . csrf_token() . '" /> 
+        <div class="form-group m-b-40">
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Supprimer</button>
+            <button type="reset" class="btn btn-inverse waves-effect waves-light">Annuler</button>
+        </div>
+    </fieldset>
+</form>';
+        return $retStr;
+    }
+    public function delete($id)
+    {
+    $act= Activity::where('id',$id)->get(); 
+    $path_before=$act[0]->before_photo_url;
+    $path_after=$act[0]->after_photo_url;
+    $type="activities";
+    $default="noimage.jpg";
+        $this->imageDeleting($path_before,$type,$default);
+        $this->imageDeleting($path_after,$type,$default);
+      $act=Activity::where('id',$id)->delete();  
+      return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
+        
+     
+    }
 
 }
