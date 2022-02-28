@@ -20,8 +20,8 @@ class ActivityController extends Controller
         else{
             $activities = Activity::where('user_id',Auth::user()->id)->get();
         }
-        
-        $cars=Car::get();
+        $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
+        $cars=Car::whereNotIn("id",$occupied_cars)->get();
         $state="";
         if($cars->isEmpty()){
             $state="disabled";
@@ -134,5 +134,98 @@ class ActivityController extends Controller
          return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
     }
    
+    public function showModalToEnd($id)
+    {
+        $act =  Activity::where('id',$id)->get();
+       $retStr = '<form  method="post" action="/edit-activity" enctype="multipart/form-data" class="floating-labels">
+    <fieldset style="border:0;">
+    <input type="hidden" name="id" value="' . $act[0]->id . '" />
+    <input type="hidden" name="_token" value="' . csrf_token() . '" />
+                        <div class="form-group m-b-40">
+                            <label for="model">Nom de modele</label>
+                            <input type="text" class="form-control" name="model"  value="'.$car[0]->model.'" >
+                        </div>
+                        <div class="form-group m-b-40">
+                            <label for="serial_number">Matricule</label>
+                            <input type="text" class="form-control" name="serial_number" value="'.$car[0]->serial_number.'" >
+                        </div>
+                        <div>
+                            <div class="form-group " style="float:left; width:50%;">
+                                <label for="place">Lieu</label>
+                                <input type="text" class="form-control" name="place"   value="'.$car[0]->place.'" >
+                            </div>
+                            <div class="form-group" style="float:left; width:50%;">
+                                <label for="kilo">Kilométrage</label>
+                                <input type="number" class="form-control" name="kilo"  value="'.$car[0]->kilo.'"   ><span class="highlight"></span> <span class="bar"></span>
+                            </div>
+                        </div >
+                        <div>
+                            <div class="form-group " style="float:left; width:50%;">
+                                <label for="is_dispo">Disponibilité</label>
+                                <select class="form-control p-0"  name="is_dispo">'.$str_dispo.'</select>
+                            </div>
+                            <div class="form-group" style="float:left; width:50%;">
+                                <label for="is_working">Etat</label>
+                                <select class="form-control p-0"  name="is_working" >'.$str_state.'</select>
+                            </div>
+                        </div >                           
+                        
+                         <div class="form-group m-b-40">
+                            <label for="carburant_id">Type Carburant</label>
+                            <select class="form-control p-0"  name="carburant_id">'.$str_carb.'</select>
+                        </div>
+
+                       <div class="form-group m-b-40">    
+            <label >Image principale</label>  
+            <table><tr><td></td><td></td>    </table>   
+            <div class="images-preview-div-3"><img id="previous" src="storage/images/'.$car[0]->photo_url.'" style="height:100px;width:100px" ></div>
+            
+            </div>
+                       <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly>
+                                    <div class="input-group-btn">
+                            
+                                        <span class="fileUpload btn btn-info">
+                                            <span class="upl" id="upload">Importer des images </span>
+                                            <input type="file" class="upload up" id="images_b" name="images"  onchange="readURL(this);" />
+                                        </span><!-- btn-orange -->
+                                    </div><!-- btn -->
+                             </div><!-- group -->
+                        </div><!-- form-group -->
+                        <br><br><br>
+
+                        <div class="images-preview-div"> </div>
+                        <div class="form-group m-b-40">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Sauvgarder</button>
+                            <button type="reset" data-dismiss="modal" class="btn btn-inverse waves-effect waves-light">Annuler</button>
+                        </div>
+    </fieldset> 
+</form><script >
+$(function() {
+// Multiple images preview with JavaScript
+var previewImages = function(input, imgPreviewPlaceholder) {
+if (input.files) {
+var filesAmount = input.files.length;
+for (i = 0; i < filesAmount; i++) {
+var reader = new FileReader();
+reader.onload = function(event) {
+    document.getElementById("previous").style.display = "none";
+$($.parseHTML("<img>")).attr("src", event.target.result).appendTo(imgPreviewPlaceholder);
+}
+reader.readAsDataURL(input.files[i]);
+}
+}
+};
+$("#images").on("change", function() {
+previewImages(this, "div.images-preview-div");
+});
+$("#images_b").on("change", function() {
+previewImages(this, "div.images-preview-div-3");
+});
+});
+</script>';
+        return $retStr;
+}
 
 }

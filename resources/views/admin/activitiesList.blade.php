@@ -162,6 +162,9 @@
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
                     |
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='details' class='DetailModalBtn'> <i class="fas fa-eye text-primary"></i> </a>
+                    @if($act->is_done==0)                    |
+                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='end' class='EndModalBtn'> <i class="fas fa-check text-primary"></i> </a>
+                    @endif
                 </td>
             </tr>
             @endforeach
