@@ -17,7 +17,11 @@ class ActivityController extends Controller
         
         $activities = Activity::get();    
         $cars=Car::get();
-        return view('admin.activitieslist')->with(['activities' => $activities,'cars'=>$cars]);
+        $state="";
+        if($cars->isEmpty()){
+            $state="disabled";
+        }
+        return view('admin.activitieslist')->with(['activities' => $activities,'cars'=>$cars,'state'=>$state]);
     }
   public function create(ActivityStoreRequest $request,$type_request)
     {

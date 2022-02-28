@@ -102,7 +102,7 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
-            @if(!$cars->isEmpty())
+           
             <table  class="table table-striped table-bordered" style="width:100%" id="customDataTable" >
                 <thead>
                     <tr>
@@ -119,7 +119,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
+             @if(!$cars->isEmpty())
             @foreach ($cars as $car)
             <tr>
                 <td data-th="Image"> <img src="{{ asset('storage/images/'.$car->photo_url) }}" style="height:50px;width:50px" > </td>
@@ -145,12 +145,16 @@
                 </td>
             </tr>
             @endforeach
+            @else
+            <tr><td colspan="9" style="text-align:center;">Liste est vide !</td></tr>  
+            @endif
+
         </tbody>
 
     </table>
-    @else
     
-    @endif
+    
+   
     
 <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">

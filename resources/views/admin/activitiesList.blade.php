@@ -41,24 +41,28 @@
                     @csrf
                     <fieldset style="border:0;">
                         <div class="form-group m-b-40">
+                            @if(!$cars->isEmpty())
                             <label for="car_id">Voiture</label>
                             <select class="form-control p-0"  name="car_id" required="">      
                                 @foreach($cars as $car)                     
                                 <option value="{{$car->id}}">{{$car->model}}</option>
                                 @endforeach
                             </select>
+                            @else
+                            <div class="alert-danger" role="alert" style="text-align:center;padding:10px;"><i class="fas fa-car fa-2x"></i></a> Veuillez ajouter une voiture !</div>
+                            @endif
                         </div>
                         <div class="form-group m-b-40">
                             <label for="before_kilos">Kilométrage initial</label>
-                            <input type="text" class="form-control" name="before_kilos"   >
+                            <input type="text" class="form-control" name="before_kilos" {{$state}}  >
                         </div>
                          <div class="form-group m-b-40">
                             <label for="destination">Destination</label>
-                            <input type="text" class="form-control" name="destination"   >
+                            <input type="text" class="form-control" name="destination" {{$state}}  >
                         </div>
                         <div class="form-group m-b-40">
                             <label for="previous_fuel_amount">Carburant initiale</label>
-                            <input type="text" class="form-control" name="previous_fuel_amount"   >
+                            <input type="text" class="form-control" name="previous_fuel_amount"  {{$state}} >
                         </div> 
                          
                         <div class="form-group m-b-40">
@@ -68,7 +72,7 @@
                             
                                         <span class="fileUpload btn btn-info">
                                             <span class="upl" id="upload">Importer l'image des kilos initiales</span>
-                                            <input type="file" class="upload up" id="images" name="images" onchange="readURL(this);" />
+                                            <input type="file" {{$state}} class="upload up" id="images" name="images" onchange="readURL(this);" />
                                         </span><!-- btn-orange -->
                                     </div><!-- btn -->
                              </div><!-- group -->
@@ -76,7 +80,7 @@
                         <br><br><br>
                         <div class="images-preview-div"> </div>
                         <div class="form-group m-b-40">
-                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Sauvgarder</button>
+                            <button type="submit" {{$state}} class="btn btn-success waves-effect waves-light m-r-10">Sauvgarder</button>
                             <button type="reset" data-dismiss="modal" class="btn btn-inverse waves-effect waves-light">Annuler</button>
                         </div>
                     </fieldset>
@@ -165,6 +169,25 @@
 
     </table>  
     </form>
+    @else
+    <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Voiture</th>
+                        <th>Chauffeur</th>
+                        <th>Kilométrage initial</th>
+                        <th>Kilométrage </th>
+                        <th>Dépenses</th>
+                        <th>Carburant acheté</th>
+                        <th>Destination</th>
+                        <th>Retour</th>
+                        <th class="text-nowrap">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+      <tr><td colspan="10" style="text-align:center;">Liste est vide !</td></tr>               
       @endif
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">

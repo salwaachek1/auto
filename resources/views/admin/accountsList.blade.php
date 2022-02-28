@@ -99,7 +99,7 @@
                     </tr>
                 </thead>
                 <tbody> 
-
+            @if(!$users->isEmpty())
             @foreach ($users as $user)
             <tr>
                 <td data-th="Image"> <img src="{{ asset('storage/users/'.$user->photo_url) }}" style="height:50px;width:50px" > </td>
@@ -113,10 +113,12 @@
                 </td>
             </tr>
             @endforeach
+            <tr><td colspan="5" style="text-align:center;">Liste est vide !</td></tr>
+            @endif
         </tbody>
 
     </table>
-    @endif
+    
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
         <div class="modal-dialog modal-lg">
