@@ -86,7 +86,6 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
-            @if(!$users->isEmpty())
             <table  class="table table-striped table-bordered" id="customDataTable"  style="width:100%">
                 <thead>
                     <tr>
@@ -113,6 +112,7 @@
                 </td>
             </tr>
             @endforeach
+            @else
             <tr><td colspan="5" style="text-align:center;">Liste est vide !</td></tr>
             @endif
         </tbody>

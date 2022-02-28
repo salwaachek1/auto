@@ -54,7 +54,7 @@
                         </div>
                         <div class="form-group m-b-40">
                             <label for="before_kilos">Kilométrage initial</label>
-                            <input type="text" class="form-control" name="before_kilos" {{$state}}  >
+                            <input type="number" class="form-control"name="before_kilos" {{$state}} ><span class="highlight"></span> <span class="bar"></span>
                         </div>
                          <div class="form-group m-b-40">
                             <label for="destination">Destination</label>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="form-group m-b-40">
                             <label for="previous_fuel_amount">Carburant initiale</label>
-                            <input type="text" class="form-control" name="previous_fuel_amount"  {{$state}} >
+                             <input type="number" class="form-control" name="previous_fuel_amount"  {{$state}} ><span class="highlight"></span> <span class="bar"></span>
                         </div> 
                          
                         <div class="form-group m-b-40">

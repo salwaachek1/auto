@@ -14,8 +14,13 @@ class ActivityController extends Controller
     use ImageTrait;
   public function index()
     {     
-        
+        if(Auth::user()->role_id==1){
         $activities = Activity::get();    
+        }
+        else{
+            $activities = Activity::where('user_id',Auth::user()->id)->get();
+        }
+        
         $cars=Car::get();
         $state="";
         if($cars->isEmpty()){
