@@ -115,4 +115,15 @@ class ActivityController extends Controller
      
     }
 
+    public function deleteMass(Request $request)
+    {
+        $acts=$request->activities;
+        for($i=0;$i<count($acts);$i++){
+            $this->delete($acts[$i]);
+        }
+        
+         return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
+    }
+   
+
 }

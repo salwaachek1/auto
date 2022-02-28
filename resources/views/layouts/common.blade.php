@@ -359,13 +359,13 @@ max-width: 100px;
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer" style="position: fixed;bottom: 0;width: 100%;">
+  <!-- <footer class="main-footer" style="bottom: 0;width: 100%;margin-top:20px;">
     <strong>Copyright &copy; 2022 Haifer.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.0
     </div>
-  </footer>
+  </footer> -->
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

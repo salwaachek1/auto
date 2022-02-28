@@ -102,6 +102,7 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
+            @if(!$cars->isEmpty())
             <table  class="table table-striped table-bordered" style="width:100%" id="customDataTable" >
                 <thead>
                     <tr>
@@ -147,6 +148,9 @@
         </tbody>
 
     </table>
+    @else
+    
+    @endif
     
 <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">

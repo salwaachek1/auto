@@ -101,10 +101,16 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
+@if(!$activities->isEmpty()) 
+<form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
+<label for="act" style="margin:10px;"><input type="checkbox" id="act" onClick="toggle(this)"  style="margin-right:10px;"> selectionner tout <a href="javascript:void(0)" onclick="document.getElementById('form1').submit();" > <i class="fas fa-trash-alt text-danger"></i> </a></label>
             
+                    @csrf
+                   
             <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Voiture</th>
                         <th>Chauffeur</th>
                         <th>Kilométrage initial</th>
@@ -121,6 +127,7 @@
 
             @foreach ($activities as $act)
             <tr>
+                <td data-th=""><input type="checkbox" id="act" name="activities[]" value="{{$act->id}}"></td>
                 <td data-th="Voiture">{{$act->car->model}} </td>
                 <td data-th="Chauffeur">{{$act->user->name}}</td>
                 <td data-th="Kilométrage initial">{{$act->before_kilos}}</td>
@@ -156,8 +163,9 @@
             @endforeach
         </tbody>
 
-    </table>
-    
+    </table>  
+    </form>
+      @endif
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
         <div class="modal-dialog modal-lg">

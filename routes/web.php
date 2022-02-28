@@ -52,4 +52,6 @@ Route::post('/add-activity/{type_request}', 'ActivityController@create');
 Route::post('/activity/details/{id}', 'ActivityController@showModalDetails');
 Route::post('/activity/delete/{id}', 'ActivityController@showModalToDelete');
 Route::post('/destroy-activity/{id}', 'ActivityController@delete');
+
+Route::post('/activities/delete', 'ActivityController@deleteMass');
 });

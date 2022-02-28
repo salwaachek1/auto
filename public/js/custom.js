@@ -115,3 +115,29 @@ $(".DetailModalBtn").click(function () {
         },
     });
 });
+$(".MassDeteleModalBtn").click(function () {
+    var url = $(this).data("url");
+    var entity = $(this).data("entity");
+    var token = $("meta[name='csrf-token']").attr("content");
+
+    // AJAX request
+    $.ajax({
+        url: "/" + entity + "/" + url,
+        type: "post",
+        data: {
+            _token: token,
+        },
+        success: function (response) {
+            $("#Modal-body").html(response);
+            $("#MainModal").modal("show");
+            console.log(response);
+        },
+    });
+});
+
+function toggle(source) {
+    checkboxes = document.getElementsByName("activities[]");
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
