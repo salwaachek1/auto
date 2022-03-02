@@ -21,7 +21,7 @@ class ActivityController extends Controller
             $activities = Activity::where('user_id',Auth::user()->id)->get();
         }
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
-        $cars=Car::whereNotIn("id",$occupied_cars)->get();
+        $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
         $state="";
         if($cars->isEmpty()){
             $state="disabled";
@@ -137,48 +137,35 @@ class ActivityController extends Controller
     public function showModalToEnd($id)
     {
         $act =  Activity::where('id',$id)->get();
-       $retStr = '<form  method="post" action="/edit-activity" enctype="multipart/form-data" class="floating-labels">
+        $retStr = '<form  method="post" action="/end-activity" enctype="multipart/form-data" class="floating-labels">
     <fieldset style="border:0;">
     <input type="hidden" name="id" value="' . $act[0]->id . '" />
     <input type="hidden" name="_token" value="' . csrf_token() . '" />
-                        <div class="form-group m-b-40">
-                            <label for="model">Nom de modele</label>
-                            <input type="text" class="form-control" name="model"  value="'.$car[0]->model.'" >
-                        </div>
-                        <div class="form-group m-b-40">
-                            <label for="serial_number">Matricule</label>
-                            <input type="text" class="form-control" name="serial_number" value="'.$car[0]->serial_number.'" >
-                        </div>
                         <div>
                             <div class="form-group " style="float:left; width:50%;">
-                                <label for="place">Lieu</label>
-                                <input type="text" class="form-control" name="place"   value="'.$car[0]->place.'" >
+                                <label for="expenses">Dépenses</label>
+                                <input type="text" class="form-control" name="expenses"   value="'.$act[0]->expenses.'" >
                             </div>
                             <div class="form-group" style="float:left; width:50%;">
-                                <label for="kilo">Kilométrage</label>
-                                <input type="number" class="form-control" name="kilo"  value="'.$car[0]->kilo.'"   ><span class="highlight"></span> <span class="bar"></span>
+                                <label for="after_kilos">Kilométrage aprés activité</label>
+                                <input type="number" class="form-control" name="after_kilos"  value="'.$act[0]->after_kilos.'"   ><span class="highlight"></span> <span class="bar"></span>
                             </div>
-                        </div >
+                        </div > 
                         <div>
                             <div class="form-group " style="float:left; width:50%;">
-                                <label for="is_dispo">Disponibilité</label>
-                                <select class="form-control p-0"  name="is_dispo">'.$str_dispo.'</select>
+                                <label for="fuel">carburant acheté</label>
+                                <input type="number" class="form-control" name="fuel"  value="'.$act[0]->fuel.'"   ><span class="highlight"></span> <span class="bar"></span>
                             </div>
                             <div class="form-group" style="float:left; width:50%;">
-                                <label for="is_working">Etat</label>
-                                <select class="form-control p-0"  name="is_working" >'.$str_state.'</select>
+                                <label for="after_fuel_amount">carburtant laissé</label>
+                                <input type="number" class="form-control" name="after_fuel_amount"  value="'.$act[0]->after_fuel_amount.'"   ><span class="highlight"></span> <span class="bar"></span>
                             </div>
-                        </div >                           
-                        
-                         <div class="form-group m-b-40">
-                            <label for="carburant_id">Type Carburant</label>
-                            <select class="form-control p-0"  name="carburant_id">'.$str_carb.'</select>
-                        </div>
+                        </div >        
 
                        <div class="form-group m-b-40">    
             <label >Image principale</label>  
             <table><tr><td></td><td></td>    </table>   
-            <div class="images-preview-div-3"><img id="previous" src="storage/images/'.$car[0]->photo_url.'" style="height:100px;width:100px" ></div>
+            <div class="images-preview-div-3"><img id="previous" src="storage/activities/noimage.jpg" style="height:100px;width:100px" ></div>
             
             </div>
                        <div class="form-group">
@@ -228,4 +215,28 @@ previewImages(this, "div.images-preview-div-3");
         return $retStr;
 }
 
+public function update(ActivityStoreRequest $request)
+    {
+        $act= Activity::firstOrNew(array('id' => $request->id));
+        $fileNameToStore = "";
+        $type="activity";
+         
+                if ($request->hasFile('images')) {
+                    
+                    $fileNameToStore =$this->imageStoring($request,$type);
+                        }
+                else {
+                    $fileNameToStore = 'noimage.jpg';
+                }
+        $act->after_photo_url = $fileNameToStore;
+        $act->after_kilos = $request->after_kilos;
+        $act->after_fuel_amount=$request->after_fuel_amount;
+        $act->expenses= $request->expenses;
+        $act->fuel= $request->fuel;
+        $act->is_done = 1;
+        $act->returning_date=now();
+        $act->save();
+        return back()->with('message', Config::get('constants.sucessful_create')); 
+    } 
+    
 }
