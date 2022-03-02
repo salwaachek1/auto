@@ -30,6 +30,13 @@ class ActivityController extends Controller
     }
   public function create(ActivityStoreRequest $request,$type_request)
     {
+        $act_check= Activity::where("car_id",$request->car_id)->latest('id')->first();
+        if(($act_check!=null)){
+            if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
+            return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
+        }
+        }
+        
         $act= Activity::firstOrNew(array('id' => $request->id));
         $fileNameToStore = "";
          $type="activity";
@@ -58,7 +65,7 @@ class ActivityController extends Controller
         $act->destination= $request->destination;
         $act->is_done = 0;
         $act->save();
-        return back()->with('message', Config::get('constants.sucessful_create')); ;
+        return back()->with('message', Config::get('constants.sucessful_create')); 
     }
      public function showModalDetails($id)
     {

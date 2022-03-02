@@ -101,14 +101,18 @@
    {!! \Session::get('message') !!}
 </div>
 @endif
+@if(isset($msg))
+ <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $msg }} </div>
+@endif
 @if($errors->any())
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
-   <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
+   <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }} </div>
 @endif
 @if(!$activities->isEmpty()) 
 <form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
+@if(Auth::user()->role_id=="1" )
 <label for="act" style="margin:10px;"><input type="checkbox" id="act" onClick="toggle(this)"  style="margin-right:10px;"> selectionner tout <a href="javascript:void(0)" onclick="document.getElementById('form1').submit();" > <i class="fas fa-trash-alt text-danger"></i> </a></label>
-            
+@endif    
                     @csrf
                    
             <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
@@ -158,8 +162,10 @@
                 @endif
                 <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
-                    |
-                    <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    
+                    @if((Auth::user()->role_id=="1")&&($act->is_done==1))
+                    | <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    @endif
                     |
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='details' class='DetailModalBtn'> <i class="fas fa-eye text-primary"></i> </a>
                     @if($act->is_done==0)                    |
