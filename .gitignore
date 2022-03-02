@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /database/*
+/app/*.php
 /storage/*.key
 /vendor
 .env
