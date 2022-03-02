@@ -49,7 +49,7 @@
                                 @endforeach
                             </select>
                             @else
-                            <div class="alert-danger" role="alert" style="text-align:center;padding:10px;"><i class="fas fa-car fa-2x"></i></a> Veuillez ajouter une voiture !</div>
+                            <div class="alert-danger" role="alert" style="text-align:center;padding:10px;"><i class="fas fa-car fa-2x"></i></a> Aucune voiture est disponible !</div>
                             @endif
                         </div>
                         <div class="form-group m-b-40">

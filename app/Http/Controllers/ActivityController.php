@@ -215,7 +215,7 @@ previewImages(this, "div.images-preview-div-3");
         return $retStr;
 }
 
-public function update(ActivityStoreRequest $request)
+public function updateDone(ActivityStoreRequest $request)
     {
         $act= Activity::firstOrNew(array('id' => $request->id));
         $fileNameToStore = "";
@@ -238,5 +238,99 @@ public function update(ActivityStoreRequest $request)
         $act->save();
         return back()->with('message', Config::get('constants.sucessful_create')); 
     } 
+
+    public function showModalToUpdate($id)
+    {
+       $act = Activity::where('id',$id)->get();
+       $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
+       $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
+       $str_car="<option value='".$act[0]->car->id."'>".$act[0]->car->model."</option>";
+       foreach($cars as $car){
+            if($act[0]->car->id!==$car->id){
+                $str_car=$str_car."<option value='".$car->id."'>".$car->model."</option>"; 
+            }                
+       }
+        $retStr = '<form  method="post" action="/edit-activity" enctype="multipart/form-data" class="floating-labels">
+    <fieldset style="border:0;">
+    <input type="hidden" name="id" value="' . $act[0]->id . '" />
+    <input type="hidden" name="_token" value="' . csrf_token() . '" />
+
+                       <div class="form-group m-b-40">
+                            <label for="car_id">Voiture</label>
+                            <select class="form-control p-0"  name="car_id" required="">'.$str_car.'                                     
+                            </select>
+                        </div>
+                        <div class="form-group m-b-40">
+                            <label for="before_kilos">Kilométrage initial</label>
+                            <input type="number" class="form-control" name="before_kilos" value="'.$act[0]->before_kilos.'"><span class="highlight"></span> <span class="bar"></span>
+                        </div>
+                         <div class="form-group m-b-40">
+                            <label for="destination">Destination</label>
+                            <input type="text" class="form-control" name="destination" value="'.$act[0]->destination.'">
+                        </div>
+                        <div class="form-group m-b-40">
+                            <label for="previous_fuel_amount">Carburant initiale</label> 
+                             <input type="number" class="form-control" name="previous_fuel_amount" value="'.$act[0]->previous_fuel_amount.'"><span class="highlight"></span> <span class="bar"></span>
+                        </div>
+
+
+                       <div class="form-group m-b-40">    
+            <label >Image principale</label>  
+            <table><tr><td></td><td></td>    </table>   
+            <div class="images-preview-div-3"><img id="previous" src="storage/activities/'.$act[0]->before_photo_url.'" style="height:100px;width:100px" ></div>
+            
+            </div>
+                       <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly>
+                                    <div class="input-group-btn">
+                            
+                                        <span class="fileUpload btn btn-info">
+                                            <span class="upl" id="upload">Importer des images </span>
+                                            <input type="file" class="upload up" id="images_b" name="images"  onchange="readURL(this);" />
+                                        </span><!-- btn-orange -->
+                                    </div><!-- btn -->
+                             </div><!-- group -->
+                        </div><!-- form-group -->
+                        <br><br><br>
+
+                        <div class="images-preview-div"> </div>
+                        <div class="form-group m-b-40">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Sauvgarder</button>
+                            <button type="reset" data-dismiss="modal" class="btn btn-inverse waves-effect waves-light">Annuler</button>
+                        </div>
+    </fieldset> 
+</form><script >
+$(function() {
+// Multiple images preview with JavaScript
+var previewImages = function(input, imgPreviewPlaceholder) {
+if (input.files) {
+var filesAmount = input.files.length;
+for (i = 0; i < filesAmount; i++) {
+var reader = new FileReader();
+reader.onload = function(event) {
+    document.getElementById("previous").style.display = "none";
+$($.parseHTML("<img>")).attr("src", event.target.result).appendTo(imgPreviewPlaceholder);
+}
+reader.readAsDataURL(input.files[i]);
+}
+}
+};
+$("#images").on("change", function() {
+previewImages(this, "div.images-preview-div");
+});
+$("#images_b").on("change", function() {
+previewImages(this, "div.images-preview-div-3");
+});
+});
+</script>';
+        return $retStr;
+    }
     
+      public function update(ActivityStoreRequest $request)
+    {
+        $type_request="update";
+        $this->create($request,$type_request);
+        return back()->with('message', Config::get('constants.sucessful_edit')); ;
+    }   
 }
