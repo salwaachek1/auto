@@ -57,5 +57,6 @@ Route::post('/activity/end/{id}', 'ActivityController@showModalToEnd');
 Route::post('/end-activity', 'ActivityController@updateDone');
 Route::post('/destroy-activity/{id}', 'ActivityController@delete');
 
+Route::get('/activities/{id}', 'ActivityController@getSelectedCarActivity');
 Route::post('/activities/delete', 'ActivityController@deleteMass');
 });

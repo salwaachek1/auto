@@ -304,7 +304,7 @@ max-width: 100px;
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./activities" class="nav-link">
+                <a href="/activities" class="nav-link">
                   <i class="fas fa-road nav-icon"></i>
                   <p>Gestion Activités</p>
                 </a>

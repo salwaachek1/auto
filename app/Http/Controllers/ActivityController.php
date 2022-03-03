@@ -13,7 +13,7 @@ class ActivityController extends Controller
 {
     use ImageTrait;
   public function index()
-    {     
+    {   
         if(Auth::user()->role_id==1){
         $activities = Activity::get();    
         }
@@ -28,10 +28,26 @@ class ActivityController extends Controller
         }
         return view('admin.activitieslist')->with(['activities' => $activities,'cars'=>$cars,'state'=>$state]);
     }
+
+
+    public function getSelectedCarActivity($id)
+    {   
+        
+        $activities =Activity::where('car_id',$id)->get();        
+        $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
+        $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
+        $state="";
+        if($cars->isEmpty()){
+            $state="disabled";
+        }
+        return view('admin.activitieslist')->with(['cars'=>$cars,'state'=>$state,'activities'=>$activities]);
+    }
+
+
   public function create(ActivityStoreRequest $request,$type_request)
     {
-        $act_check= Activity::where("car_id",$request->car_id)->latest('id')->first();
-        if(($act_check!=null)){
+        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->latest('id')->first();
+        if(($act_check[0]!=null)){
             if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
             return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
         }
@@ -89,7 +105,7 @@ class ActivityController extends Controller
                 </thead>
                 <tbody>
             <tr>
-                <td data-th="Photo initiale"><img src="storage/activities/'.$act->before_photo_url.'") " style="height:50px;width:50px" ></td>
+                <td data-th="Photo initiale"><img src="storage/activities/'.$act->before_photo_url.'" style="height:50px;width:50px" ></td>
                 <td data-th="Photo actuelle"><img src="storage/activities/'.$photo.'" style="height:50px;width:50px" ></td>
                 <td data-th="Carburant initial">'.$act->previous_fuel_amount.'</td>
                 <td data-th="Carburant laissé">'.$fuel.'</td>

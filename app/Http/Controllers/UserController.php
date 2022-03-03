@@ -147,7 +147,7 @@ previewImages(this, "div.images-preview-div-3");
     public function delete($id)
     {
       $user=User::where('id',$id)->get(); 
-      $path= $car[0]->photo_url;
+      $path= $user[0]->photo_url;
       $type="users";
       $default="user.png";
       $this->imageDeleting($path,$type,$default);

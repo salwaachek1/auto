@@ -108,6 +108,7 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }} </div>
 @endif
+
 @if(!$activities->isEmpty()) 
 <form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
 @if(Auth::user()->role_id=="1" )
@@ -178,7 +179,7 @@
 
     </table>  
     </form>
-    @else
+    @elseif($activities->isEmpty())
     <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
                 <thead>
                     <tr>

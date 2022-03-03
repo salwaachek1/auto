@@ -21,7 +21,7 @@ trait ImageTrait {
   public function imageDeleting($path,$type,$default){
 
         $image_path = "storage/".$type.'/'.$path;
-        if(File::exists($image_path)&&($image_path!=$default)) {
+        if(File::exists($image_path)&&($path!=$default)) {
             File::delete($image_path);
         }
         return true;

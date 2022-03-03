@@ -142,6 +142,8 @@
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='edit' data-entity='car' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='delete' data-entity='car' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    |
+                    <a href="/activities/{{$car->id}}" > <i class="fas fa-eye text-primary"></i> </a>
                 </td>
             </tr>
             @endforeach
