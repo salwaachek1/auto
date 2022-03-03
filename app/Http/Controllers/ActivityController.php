@@ -30,10 +30,14 @@ class ActivityController extends Controller
     }
 
 
-    public function getSelectedCarActivity($id)
+    public function getSelectedActivity($type,$id)
     {   
-        
-        $activities =Activity::where('car_id',$id)->get();        
+        if($type=="selection"){
+        $activities =Activity::where('car_id',$id)->get();
+        }
+        else{
+            $activities =Activity::where('user_id',$id)->get();
+        }        
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
         $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
         $state="";
@@ -42,6 +46,7 @@ class ActivityController extends Controller
         }
         return view('admin.activitieslist')->with(['cars'=>$cars,'state'=>$state,'activities'=>$activities]);
     }
+    
 
 
   public function create(ActivityStoreRequest $request,$type_request)

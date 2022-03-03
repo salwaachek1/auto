@@ -108,7 +108,10 @@
                 <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$user->id}}' data-entity='user'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |
+                    <a href="/user/activities/{{$user->id}}" > <i class="fas fa-eye text-primary"></i> </a>
+                    |
                     <a href="javascript:void(0)" data-id='{{$user->id}}' data-entity='user'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    
                 </td>
             </tr>
             @endforeach
