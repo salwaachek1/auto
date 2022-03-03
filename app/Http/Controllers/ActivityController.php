@@ -15,10 +15,10 @@ class ActivityController extends Controller
   public function index()
     {   
         if(Auth::user()->role_id==1){
-        $activities = Activity::get();    
+        $activities = Activity::latest('id')->get();    
         }
         else{
-            $activities = Activity::where('user_id',Auth::user()->id)->get();
+            $activities = Activity::where('user_id',Auth::user()->id)->latest('id')->get();
         }
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
         $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
@@ -33,10 +33,10 @@ class ActivityController extends Controller
     public function getSelectedActivity($type,$id)
     {   
         if($type=="selection"){
-        $activities =Activity::where('car_id',$id)->get();
+        $activities =Activity::where('car_id',$id)->latest('id')->get();
         }
         else{
-            $activities =Activity::where('user_id',$id)->get();
+            $activities =Activity::where('user_id',$id)->latest('id')->get();
         }        
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
         $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
@@ -51,8 +51,8 @@ class ActivityController extends Controller
 
   public function create(ActivityStoreRequest $request,$type_request)
     {
-        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->latest('id')->first();
-        if(($act_check[0]!=null)){
+        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->first();
+        if(($act_check!=null)){
             if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
             return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
         }
@@ -139,7 +139,10 @@ class ActivityController extends Controller
     }
     public function delete($id)
     {
-    $act= Activity::where('id',$id)->get(); 
+    $act= Activity::where('id',$id)->get();
+    if($act[0]->is_done==0) {
+        return false;
+    }
     $path_before=$act[0]->before_photo_url;
     $path_after=$act[0]->after_photo_url;
     $type="activities";
@@ -147,7 +150,7 @@ class ActivityController extends Controller
         $this->imageDeleting($path_before,$type,$default);
         $this->imageDeleting($path_after,$type,$default);
       $act=Activity::where('id',$id)->delete();  
-      return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
+     return true;
         
      
     }
@@ -156,10 +159,17 @@ class ActivityController extends Controller
     {
         $acts=$request->activities;
         for($i=0;$i<count($acts);$i++){
-            $this->delete($acts[$i]);
+            $state=$this->delete($acts[$i]);
+        }
+        if($state) {
+            return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
+        }
+        else{            
+            $msg=" vous avez selectionné des activités qui ne sont terminées !";
+            return redirect('/activities')->with('msgs', $msg); 
         }
         
-         return redirect('/activities')->with('message', Config::get('constants.sucessful_delete')); 
+         
     }
    
     public function showModalToEnd($id)

@@ -143,3 +143,22 @@ function toggle(source) {
         checkboxes[i].checked = source.checked;
     }
 }
+
+// $(".showSelect").live("change", function () {
+//     var option = $(this.options[index]);
+//     var divs = $(option).attr("data-div");
+
+//     $.ajax({
+//         url: "/" + entity + "/" + url + "/" + id,
+//         type: "post",
+//         data: {
+//             id: id,
+//             _token: token,
+//         },
+//         success: function (response) {
+//             $("#Modal-body").html(response);
+//             $("#MainModal").modal("show");
+//             console.log(response);
+//         },
+//     });
+// });
