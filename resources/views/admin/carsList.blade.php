@@ -102,7 +102,7 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
-           
+ <label for="search" style="margin:10px; text-align:left;clear: both;float:left;"><i class="fas fa-search "></i> Recherche <input class="form-control" id="search" type="text"  placeholder="recherche.."> </label>          
             <table  class="table table-striped table-bordered" style="width:100%" id="customDataTable" >
                 <thead>
                     <tr>
@@ -118,7 +118,7 @@
 
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="dataTable">
              @if(!$cars->isEmpty())
             @foreach ($cars as $car)
             <tr>

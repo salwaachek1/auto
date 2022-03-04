@@ -108,14 +108,14 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }} </div>
 @endif
-
+<span style="  display: inline-block;"><label for="search" style="margin:10px;"><i class="fas fa-search "></i> Recherche <input class="form-control" id="search" type="text"  placeholder="recherche.."/> </label></span>
 @if(!$activities->isEmpty()) 
 <form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
 @if(Auth::user()->role_id=="1") 
 <label for="act" style="margin:10px;"><input type="checkbox" id="act" onClick="toggle(this)"  style="margin-right:10px;"> selectionner tout <a href="javascript:void(0)" onclick="document.getElementById('form1').submit();" > <i class="fas fa-trash-alt text-danger"></i> </a></label>
 @endif    
                     @csrf
-                   
+                  
             <table  class="table table-striped table-bordered" id="customDataTable" style="width:100%">
                 <thead>
                     <tr>
@@ -133,7 +133,7 @@
 
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="dataTable">
 
             @foreach ($activities as $act)
             <tr>
