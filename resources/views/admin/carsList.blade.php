@@ -154,7 +154,7 @@
         </tbody>
 
     </table>
-    
+     {!! $cars->links() !!}
     
    
     

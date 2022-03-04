@@ -121,7 +121,7 @@
         </tbody>
 
     </table>
-    
+     {!! $users->links() !!}
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
         <div class="modal-dialog modal-lg">

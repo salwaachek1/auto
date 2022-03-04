@@ -14,7 +14,7 @@ class UserController extends Controller
     use ImageTrait;
    public function index()
     {     
-        $users = User::get();    
+        $users = User::paginate(10);    
         return view('admin.accountslist')->with(['users'=>$users]);
     }
 

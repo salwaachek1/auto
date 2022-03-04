@@ -15,7 +15,7 @@ class CarController extends Controller
   public function index()
     {     
         $carburants = Carburant::get();    
-        $cars = Car::get();    
+        $cars = Car::paginate(10);    
         return view('admin.carslist')->with(['carburants' => $carburants,'cars'=>$cars]);
     }
 

@@ -164,8 +164,9 @@
                 <td data-th="Retour">{{$act->returning_date}}</td>
                 @endif
                 <td data-th="Action" class="text-nowrap">
+                    @if($act->is_done==0)
                     <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
-                    
+                    @endif
                     @if((Auth::user()->role_id=="1")&&($act->is_done==1))
                     | <a href="javascript:void(0)" data-id='{{$act->id}}' data-entity='activity'  data-url='delete' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
                     @endif                    
@@ -200,8 +201,12 @@
                     </tr>
                 </thead>
                 <tbody>
-      <tr><td colspan="10" style="text-align:center;">Liste est vide !</td></tr>               
+      <tr><td colspan="10" style="text-align:center;">Liste est vide !</td></tr>    
+</tbody>
+</table>
+
       @endif
+      {!! $activities->links() !!}
  <!-- delete/edit common modal -->
    <div class="modal fade" id="MainModal" role="dialog">
         <div class="modal-dialog modal-lg">

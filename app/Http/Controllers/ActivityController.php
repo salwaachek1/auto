@@ -15,10 +15,10 @@ class ActivityController extends Controller
   public function index()
     {   
         if(Auth::user()->role_id==1){
-        $activities = Activity::latest('id')->get();    
+        $activities = Activity::latest('id')->paginate(10);    
         }
         else{
-            $activities = Activity::where('user_id',Auth::user()->id)->latest('id')->get();
+            $activities = Activity::where('user_id',Auth::user()->id)->latest('id')->paginate(10);
         }
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
         $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
@@ -33,10 +33,10 @@ class ActivityController extends Controller
     public function getSelectedActivity($type,$id)
     {   
         if($type=="selection"){
-        $activities =Activity::where('car_id',$id)->latest('id')->get();
+        $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
         }
         else{
-            $activities =Activity::where('user_id',$id)->latest('id')->get();
+            $activities =Activity::where('user_id',$id)->latest('id')->paginate(15);
         }        
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
         $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
@@ -52,7 +52,7 @@ class ActivityController extends Controller
   public function create(ActivityStoreRequest $request,$type_request)
     {
         $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->first();
-        if(($act_check!=null)){
+        if(isset($act_checknull)){
             if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
             return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
         }
