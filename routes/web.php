@@ -33,6 +33,8 @@ Route::post('/destroy-car/{id}', 'CarController@delete');
 Route::post('/car/edit/{id}', 'CarController@showModalToUpdate');
 Route::post('/edit-car', 'CarController@update');
 
+Route::post('/car/statistics/{id}', 'CarController@showStatisticsModal');
+
 // account management
 Route::get('/users', 'UserController@index');
 Route::post('/add-driver/{type_request}', 'UserController@create');

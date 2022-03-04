@@ -46,7 +46,6 @@ class ActivityController extends Controller
         }
         return view('admin.activitieslist')->with(['cars'=>$cars,'state'=>$state,'activities'=>$activities]);
     }
-    
 
 
   public function create(ActivityStoreRequest $request,$type_request)
@@ -62,6 +61,15 @@ class ActivityController extends Controller
         $fileNameToStore = "";
          $type="activity";
          if($type_request=="update"){
+
+              $validated = $request->validate([
+                'after_kilos' => 'required',
+                'expenses' => 'required',
+                'fuel' => 'required',
+                'after_fuel_amount' => 'required',
+                'after_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+                ]);
+
             if ($request->hasFile('images')) {
                
                 $fileNameToStore =$this->imageStoring($request,$type);
@@ -70,6 +78,12 @@ class ActivityController extends Controller
                 
         }
         else{
+             $validated = $request->validate([
+                'before_kilos' => 'required',
+                'previous_fuel_amount' => 'required',
+                'destination' => 'required',
+                'before_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+                ]);
                 if ($request->hasFile('images')) {
                     
                     $fileNameToStore =$this->imageStoring($request,$type);
@@ -86,6 +100,9 @@ class ActivityController extends Controller
         $act->destination= $request->destination;
         $act->is_done = 0;
         $act->save();
+        $car_booked=Car::find($request->car_id);
+        $car_booked->is_dispo=0;
+        $car_booked->save();
         return back()->with('message', Config::get('constants.sucessful_create')); 
     }
      public function showModalDetails($id)
@@ -274,6 +291,9 @@ public function updateDone(ActivityStoreRequest $request)
         $act->is_done = 1;
         $act->returning_date=now();
         $act->save();
+        $car_booked=Car::find($act->car_id);
+        $car_booked->is_dispo=1;
+        $car_booked->save();
         return back()->with('message', Config::get('constants.sucessful_create')); 
     } 
 

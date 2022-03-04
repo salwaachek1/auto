@@ -108,7 +108,8 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }} </div>
 @endif
-<span style="  display: inline-block;"><label for="search" style="margin:10px;"><i class="fas fa-search "></i> Recherche <input class="form-control" id="search" type="text"  placeholder="recherche.."/> </label></span>
+<input class="form-control" style="width:40%;margin:10px;" id="search" type="text"  placeholder="recherche.."/> 
+
 @if(!$activities->isEmpty()) 
 <form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
 @if(Auth::user()->role_id=="1") 
@@ -133,35 +134,34 @@
 
                     </tr>
                 </thead>
-                <tbody id="dataTable">
-
+                <tbody id="dataTable">            
             @foreach ($activities as $act)
             <tr>
-                <td data-th=""><input type="checkbox" id="act" name="activities[]" value="{{$act->id}}"></td>
-                <td data-th="Voiture">{{$act->car->model}} </td>
-                <td data-th="Chauffeur">{{$act->user->name}}</td>
-                <td data-th="Kilométrage initial">{{$act->before_kilos}}</td>
+                <td data-th=""><input type="checkbox" class="act-id" id="act" name="activities[]" value="{{$act->id}}"></td>
+                <td data-th="Voiture" class="act-model">{{$act->car->model}} </td>
+                <td data-th="Chauffeur" class="act-driver">{{$act->user->name}}</td>
+                <td data-th="Kilométrage initial" class="act-before-kilo">{{$act->before_kilos}}</td>
                 @if($act->after_kilos==null)
-                <td data-th="Kilométrage"> -- </td>
+                <td data-th="Kilométrage" > -- </td>
                 @else
                 <td data-th="Kilométrage">{{$act->after_kilos}}</td>
                 @endif
                 @if($act->expenses==null)
                 <td data-th="Dépenses">--</td>
                 @else
-                <td data-th="Dépenses">{{$act->expenses}}</td>
+                <td data-th="Dépenses" class="act-expenses">{{$act->expenses}}</td>
                 @endif
                 @if($act->fuel==null)
                 <td data-th="Carburant acheté">--</td>
                 @else
-                <td data-th="Carburant acheté">{{$act->fuel}}</td>
+                <td data-th="Carburant acheté" class="act-fuel">{{$act->fuel}}</td>
                 @endif
-                <td data-th="Destination">{{$act->destination}}</td>
-                <td data-th="Depart">{{$act->created_at}}   </td>
+                <td data-th="Destination" class="act-destination">{{$act->destination}}</td>
+                <td data-th="Depart" class="act-created-at">{{$act->created_at}}   </td>
                 @if($act->returning_date==null)
                 <td data-th="Retour"> <i class="fas fa-road"></i></td>
                 @else
-                <td data-th="Retour">{{$act->returning_date}}</td>
+                <td data-th="Retour" class="act-returning">{{$act->returning_date}}</td>
                 @endif
                 <td data-th="Action" class="text-nowrap">
                     @if($act->is_done==0)

@@ -137,6 +137,28 @@ $(".EndModalBtn").click(function () {
     });
 });
 
+$(".StatModalBtn").click(function () {
+    var id = $(this).data("id");
+    var url = $(this).data("url");
+    var entity = $(this).data("entity");
+    var token = $("meta[name='csrf-token']").attr("content");
+
+    // AJAX request
+    $.ajax({
+        url: "/" + entity + "/" + url + "/" + id,
+        type: "post",
+        data: {
+            id: id,
+            _token: token,
+        },
+        success: function (response) {
+            $("#Modal-body").html(response);
+            $("#MainModal").modal("show");
+            console.log(response);
+        },
+    });
+});
+
 function toggle(source) {
     checkboxes = document.getElementsByName("activities[]");
     for (var i = 0, n = checkboxes.length; i < n; i++) {

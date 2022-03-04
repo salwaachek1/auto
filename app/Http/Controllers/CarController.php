@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
  use App\Http\Requests\CarStoreRequest;
 use App\Carburant;
 use App\Car;
+use App\Activity;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use App\Http\Traits\ImageTrait;
@@ -14,11 +15,62 @@ class CarController extends Controller
     use ImageTrait;
   public function index()
     {     
-        $carburants = Carburant::get();    
-        $cars = Car::paginate(10);    
+        $carburants = Carburant::get();            
+        $cars = Car::paginate(10);        
         return view('admin.carslist')->with(['carburants' => $carburants,'cars'=>$cars]);
     }
-
+ public function showStatisticsModal($id)
+    {
+        $expenses=Activity::where("car_id",$id)->sum("expenses");
+        $carburants=Activity::where("car_id",$id)->sum("fuel");
+        $activity_count=Activity::where("car_id",$id)->count();
+        // $kilos=Activity::where("car_id",$id)->sum("carburant");
+        $retStr= ' 
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner" style="margin-bottom:20px;">
+                <h4>Carburant</h4> 
+                <p></p>               
+              </div>
+              <div class="icon">
+               <i class="fas fa-gas-pump"></i>
+              </div>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$carburants.'</i></a>
+            </div>
+          </div>
+           <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner" style="margin-bottom:20px;">
+                <h4>Dépenses</h4> 
+                <p></p>               
+              </div>
+              <div class="icon">
+               <i class="fas fa-dollar-sign"></i>
+              </div>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$expenses.'</i></a>
+            </div>
+          </div>
+           <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner" style="margin-bottom:20px;">
+                <h4>Activités </h4> 
+                <p></p>               
+              </div>
+              <div class="icon">
+               <i class="fas fa-road"></i>
+              </div>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$activity_count.'</i></a>
+            </div>
+          </div>
+          </div>
+          ';
+        return $retStr;
+    }
+    
   public function create(CarStoreRequest $request,$type_request)
     {
         $car= Car::firstOrNew(array('id' => $request->id));

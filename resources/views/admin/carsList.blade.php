@@ -102,12 +102,13 @@
     <!-- {!! implode('', $errors->all('<div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;">:message</div>')) !!} -->
    <div class="alert alert-danger" role="alert" style="width:100%;margin:20px;text-align:center;"> {{ $errors->first() }}</div>
 @endif
- <label for="search" style="margin:10px; text-align:left;clear: both;float:left;"><i class="fas fa-search "></i> Recherche <input class="form-control" id="search" type="text"  placeholder="recherche.."> </label>          
+<input class="form-control" style="width:40%;margin:10px;" id="search" type="text"  placeholder="recherche.."/>          
             <table  class="table table-striped table-bordered" style="width:100%" id="customDataTable" >
                 <thead>
                     <tr>
                         <th>Image</th>
                         <th>Modèle</th>
+                        <!-- <th><i class="fas fa-pencil-alt"></i> Expenses</th> -->
                         <th>Matricule</th>
                         <th>Lieu</th>
                         <th>Carburant</th>
@@ -144,6 +145,8 @@
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='delete' data-entity='car' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
                     |
                     <a href="/car/selection/{{$car->id}}" > <i class="fas fa-eye text-primary"></i> </a>
+                    |
+                    <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='statistics' data-entity='car' class='StatModalBtn' > <i class="fas fa-chart-bar text-primary"></i> </a>
                 </td>
             </tr>
             @endforeach
