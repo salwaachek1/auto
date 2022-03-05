@@ -24,6 +24,11 @@ class CarController extends Controller
         $expenses=Activity::where("car_id",$id)->sum("expenses");
         $carburants=Activity::where("car_id",$id)->sum("fuel");
         $activity_count=Activity::where("car_id",$id)->count();
+        $farest=Activity::where("car_id",$id)->select("after_kilos","before_kilos","user_id")->get();
+        foreach($farest as $far){
+             $vals[]=$far->before_kilos-$far->after_kilos;
+        }
+        $max=max($vals);
         // $kilos=Activity::where("car_id",$id)->sum("carburant");
         $retStr= ' 
         <div class="row d-flex justify-content-center">
@@ -37,7 +42,7 @@ class CarController extends Controller
               <div class="icon">
                <i class="fas fa-gas-pump"></i>
               </div>
-              <a href="#" style="font-size:20px;" class="small-box-footer">'.$carburants.'</i></a>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$carburants.'</a>
             </div>
           </div>
            <div class="col-lg-3 col-6">
@@ -50,7 +55,7 @@ class CarController extends Controller
               <div class="icon">
                <i class="fas fa-dollar-sign"></i>
               </div>
-              <a href="#" style="font-size:20px;" class="small-box-footer">'.$expenses.'</i></a>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$expenses.'</a>
             </div>
           </div>
            <div class="col-lg-3 col-6">
@@ -63,7 +68,20 @@ class CarController extends Controller
               <div class="icon">
                <i class="fas fa-road"></i>
               </div>
-              <a href="#" style="font-size:20px;" class="small-box-footer">'.$activity_count.'</i></a>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$activity_count.'</a>
+            </div>
+            </div>
+           <div class="col-lg-6 col-12">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner" style="margin-bottom:20px;">
+                <h4>Distance la plus longue</h4> 
+                <p></p>               
+              </div>
+              <div class="icon">
+               <i class="fas fa-chart-line"></i>
+              </div>
+              <a href="#" style="font-size:20px;" class="small-box-footer">'.$max.'</a>
             </div>
           </div>
           </div>
