@@ -35,7 +35,7 @@ class ActivityController extends Controller
         if($type=="selection"){
         $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
         }
-         if($type=="longest-distance"){
+        else if($type=="longest-distance"){
         $activities =Activity::where('id',$id)->latest('id')->paginate(15);
         }
         else{
@@ -130,8 +130,8 @@ class ActivityController extends Controller
                 </thead>
                 <tbody>
             <tr>
-                <td data-th="Photo initiale"><img src="storage/activities/'.$act->before_photo_url.'" style="height:50px;width:50px" ></td>
-                <td data-th="Photo actuelle"><img src="storage/activities/'.$photo.'" style="height:50px;width:50px" ></td>
+                <td data-th="Photo initiale"><img src="/storage/activities/'.$act->before_photo_url.'" style="height:50px;width:50px" ></td>
+                <td data-th="Photo actuelle"><img src="/storage/activities/'.$photo.'" style="height:50px;width:50px" ></td>
                 <td data-th="Carburant initial">'.$act->previous_fuel_amount.'</td>
                 <td data-th="Carburant laissé">'.$fuel.'</td>
             </tr>
