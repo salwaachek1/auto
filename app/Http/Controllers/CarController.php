@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Carburant;
 use App\Car;
 use App\Activity;
+use App\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use App\Http\Traits\ImageTrait;
@@ -21,14 +22,37 @@ class CarController extends Controller
     }
  public function showStatisticsModal($id)
     {
+        $expenses=0;
+        $carburants=0;
+        $str='';
         $expenses=Activity::where("car_id",$id)->sum("expenses");
         $carburants=Activity::where("car_id",$id)->sum("fuel");
         $activity_count=Activity::where("car_id",$id)->count();
-        $farest=Activity::where("car_id",$id)->select("after_kilos","before_kilos","user_id")->get();
-        foreach($farest as $far){
+        $farest=Activity::where("car_id",$id)->where("is_done",1)->select("after_kilos","before_kilos","user_id","id")->get();
+        if(!$farest->isEmpty()){
+            foreach($farest as $far){
              $vals[]=$far->before_kilos-$far->after_kilos;
+             $id_user[]=$far->user_id;
+             $id_act[]=$far->id;
         }
         $max=max($vals);
+        $id= array_keys($vals,$max);
+        $id_driver=$id_user[$id[0]];
+        $id_activity=$id_act[$id[0]];
+        $driver=User::where("id",$id_driver)->select("name")->get();
+        $act=Activity::where("id",$id_activity)->select("destination")->get();
+        $str='<div class="small-box bg-warning">
+              <div class="inner" style="margin-bottom:20px;">
+                <h4>Distance la plus longue</h4> 
+                <p></p>               
+              </div>
+              <div class="icon">
+               <i class="fas fa-chart-line"></i>
+              </div>
+              <a href="#" style="font-size:20px;" class="small-box-footer"><i class="fas fa-road nav-icon"></i>'.$max.' Km  <i class="fas fa-map-pin nav-icon"></i> '.ucwords($act[0]->destination).' <i class="fas fa-user nav-icon"></i> '.$driver[0]->name.'</a>
+              <a href="/car/longest-distance/'.$id_activity.' style="font-size:15px;font-weight:bolder;" class="small-box-footer">Voir details </a>';
+        }
+        
         // $kilos=Activity::where("car_id",$id)->sum("carburant");
         $retStr= ' 
         <div class="row d-flex justify-content-center">
@@ -71,17 +95,7 @@ class CarController extends Controller
               <a href="#" style="font-size:20px;" class="small-box-footer">'.$activity_count.'</a>
             </div>
             </div>
-           <div class="col-lg-6 col-12">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner" style="margin-bottom:20px;">
-                <h4>Distance la plus longue</h4> 
-                <p></p>               
-              </div>
-              <div class="icon">
-               <i class="fas fa-chart-line"></i>
-              </div>
-              <a href="#" style="font-size:20px;" class="small-box-footer">'.$max.'</a>
+           <div class="col-lg-6 col-12">'.$str.'     
             </div>
           </div>
           </div>

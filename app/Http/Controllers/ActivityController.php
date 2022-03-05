@@ -35,6 +35,9 @@ class ActivityController extends Controller
         if($type=="selection"){
         $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
         }
+         if($type=="longest-distance"){
+        $activities =Activity::where('id',$id)->latest('id')->paginate(15);
+        }
         else{
             $activities =Activity::where('user_id',$id)->latest('id')->paginate(15);
         }        
