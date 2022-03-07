@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Auth;
 class ActivityController extends Controller
 {
     use ImageTrait;
+        /**
+     * this function returns all activities for admin and for driver it returns only their own activities  
+     *
+     * @param 
+     */
   public function index()
     {   
         if(Auth::user()->role_id==1){
@@ -29,16 +34,20 @@ class ActivityController extends Controller
         return view('admin.activitieslist')->with(['activities' => $activities,'cars'=>$cars,'state'=>$state]);
     }
 
-
+    /**
+         * this function return activities that belongs to a car or a user
+         *
+         * @param string $type the type of asked activity: "selection" refer to a specific car, we want to return all activities related to that car, "longest-distance" refer to an activity, we want to return the rest of info
+         */
     public function getSelectedActivity($type,$id)
     {   
-        if($type=="selection"){
+        if($type=="selection"){ // if true it will returns activities that belongs to a specific car
         $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
         }
-        else if($type=="longest-distance"){
+        else if($type=="longest-distance"){ // if true it will returns an activity through activity's ID
         $activities =Activity::where('id',$id)->latest('id')->paginate(15);
         }
-        else{
+        else{ // return activities that belongs to a specific user
             $activities =Activity::where('user_id',$id)->latest('id')->paginate(15);
         }        
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
@@ -53,8 +62,8 @@ class ActivityController extends Controller
 
   public function create(ActivityStoreRequest $request,$type_request)
     {
-        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->first();
-        if(isset($act_checknull)){
+        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->latest()->get();
+        if(isset($act_check)){
             if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
             return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
         }
@@ -65,14 +74,13 @@ class ActivityController extends Controller
          $type="activity";
          if($type_request=="update"){
 
-              $validated = $request->validate([
-                'after_kilos' => 'required',
-                'expenses' => 'required',
-                'fuel' => 'required',
-                'after_fuel_amount' => 'required',
-                'after_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+             
+                 $validated = $request->validate([
+                'before_kilos' => 'required',
+                'previous_fuel_amount' => 'required',
+                'destination' => 'required',
+                'before_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
                 ]);
-
             if ($request->hasFile('images')) {
                
                 $fileNameToStore =$this->imageStoring($request,$type);
@@ -80,13 +88,8 @@ class ActivityController extends Controller
                 }
                 
         }
-        else{
-             $validated = $request->validate([
-                'before_kilos' => 'required',
-                'previous_fuel_amount' => 'required',
-                'destination' => 'required',
-                'before_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
-                ]);
+        else {             
+            
                 if ($request->hasFile('images')) {
                     
                     $fileNameToStore =$this->imageStoring($request,$type);
@@ -277,6 +280,13 @@ public function updateDone(ActivityStoreRequest $request)
     {
         $act= Activity::firstOrNew(array('id' => $request->id));
         $fileNameToStore = "";
+        $validated = $request->validate([
+                'after_kilos' => 'required',
+                'expenses' => 'required',
+                'fuel' => 'required',
+                'after_fuel_amount' => 'required',
+                'after_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+                ]);
         $type="activity";
          
                 if ($request->hasFile('images')) {
@@ -296,6 +306,7 @@ public function updateDone(ActivityStoreRequest $request)
         $act->save();
         $car_booked=Car::find($act->car_id);
         $car_booked->is_dispo=1;
+        $car_booked->kilos= $car_booked->kilos+$request->after_kilos;
         $car_booked->save();
         return back()->with('message', Config::get('constants.sucessful_create')); 
     } 

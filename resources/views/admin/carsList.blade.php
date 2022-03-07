@@ -20,6 +20,8 @@
   margin: auto;
 }
 </style>
+<!-- ChartJS -->
+
 <button type="button" class="popup-with-form btn btn-block btn-primary btn-rounded" data-toggle="modal" data-target="#newCar" >Ajouter Voiture</button>
 <div id="newCar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newAct" aria-hidden="true">
     <div class="modal-dialog modal-lg" >
@@ -166,18 +168,16 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Gestion voiture</h4>
+                    <h4 class="modal-title"><i class="fas fa-car"></i> Gestion voiture</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
             <div class="modal-body" id="Modal-body">   
                       
             </div>
+         
            
         </div>
     </div>
  <!-- -------- -->
-
-    
-    
 
 @endsection
