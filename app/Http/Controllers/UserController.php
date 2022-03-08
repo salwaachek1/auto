@@ -5,17 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
- use App\Http\Requests\UserStoreRequest;
- use Illuminate\Support\Facades\Config;
- use App\Http\Traits\ImageTrait;
- use Illuminate\Support\Facades\File;
+use App\Http\Requests\UserStoreRequest;
+use Illuminate\Support\Facades\Config;
+use App\Http\Traits\ImageTrait;
+use Illuminate\Support\Facades\File;
+use App\Car;
 class UserController extends Controller
 {
     use ImageTrait;
    public function index()
     {     
-        $users = User::paginate(10);    
-        return view('admin.accountslist')->with(['users'=>$users]);
+        $users = User::paginate(10);   
+        $cars=Car::all(); 
+        return view('admin.accountslist')->with(['users'=>$users,'cars'=>$cars]);
     }
 
   public function create(UserStoreRequest $request,$type_request)
@@ -28,7 +30,9 @@ class UserController extends Controller
             $fileNameToStore =$this->imageStoring($request,$type);
             $user->photo_url = $fileNameToStore;
                 }
-                
+                if($request->car_id==0){
+            $user->car_id=null;
+        }
         }
         else{
                 if ($request->hasFile('images')) {
@@ -41,7 +45,9 @@ class UserController extends Controller
             $user->photo_url = $fileNameToStore;
         }
         
-        
+        if($request->car_id!=0){
+            $user->car_id=$request->car_id;
+        }
         $user->email = $request->email;
         $user->role_id =2;
         $user->name= $request->name;
@@ -58,7 +64,24 @@ class UserController extends Controller
     } 
     public function showModalToUpdate($id)
     {
-       $user= User::where('id',$id)->get();       
+       $user= User::where('id',$id)->get();            
+    //    $cars=Car::where("is_working",1)->get();
+        $cars=Car::all();
+        if($user[0]->car!=null){
+            $str_car="<option value='".$user[0]->car->id."'>".$user[0]->car->model."</option>";
+            $str_car=$str_car."<option value='0'>tout</option>";
+            foreach($cars as $car){
+            if($user[0]->car->id!=$car->id){
+                $str_car=$str_car."<option value='".$car->id."'>".$car->model."</option>"; 
+            }
+            }
+        }
+        else{
+            $str_car="<option value='0'>tout</option>";
+            foreach($cars as $car){
+              $str_car=$str_car."<option value='".$car->id."'>".$car->model."</option>";   
+            }
+        }  
        $retStr = '<form  method="post" action="/edit-user" enctype="multipart/form-data" class="floating-labels">
     <fieldset style="border:0;">
     <input type="hidden" name="id" value="' . $user[0]->id . '" />
@@ -66,6 +89,11 @@ class UserController extends Controller
                         <div class="form-group m-b-40">
                             <label for="name">Nom</label>
                             <input type="text" class="form-control" name="name" value="'.$user[0]->name.'"  >
+                        </div>
+                         <div class="form-group m-b-40">
+                            <label for="car_id">Voiture</label>
+                            <select class="form-control p-0"  name="car_id" required="">'.$str_car.'                                     
+                            </select>
                         </div>
                          <div class="form-group m-b-40">
                             <label for="email">Email</label>

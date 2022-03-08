@@ -113,7 +113,7 @@
 @if(!$activities->isEmpty()) 
 <form  method="post" enctype="multipart/form-data" id="form1" action="/activities/delete"  style="width:100%">
 @if(Auth::user()->role_id=="1") 
-<label for="act" style="margin:10px;"><input type="checkbox" id="act" onClick="toggle(this)"  style="margin-right:10px;"> selectionner tout <a href="javascript:void(0)" onclick="document.getElementById('form1').submit();" > <i class="fas fa-trash-alt text-danger"></i> </a></label>
+<label for="act" style="margin:10px;"><input type="checkbox"  id="act" onClick="toggle(this)"  style="margin-right:10px;"> selectionner tout <a href="javascript:void(0)" onclick="document.getElementById('form1').submit();" > <i class="fas fa-trash-alt text-danger"></i> </a></label>
 @endif    
                     @csrf
                   
@@ -137,7 +137,7 @@
                 <tbody id="dataTable">            
             @foreach ($activities as $act)
             <tr>
-                <td data-th=""><input type="checkbox" class="act-id" id="act" name="activities[]" value="{{$act->id}}"></td>
+                <td data-th=""><input type="checkbox"  class="act-id" id="act" name="activities[]" value="{{$act->id}}"></td>
                 <td data-th="Voiture" class="act-model">{{$act->car->model}} </td>
                 <td data-th="Chauffeur" class="act-driver">{{$act->user->name}}</td>
                 <td data-th="Kilométrage initial" class="act-before-kilo">{{$act->before_kilos}}</td>

@@ -44,7 +44,18 @@
                             <div class="form-group " style="float:left; width:50%;">
                                 <label for="place">Mot de passe</label>
                                 <input type="password" class="form-control" name="password" >
-                            </div>   
+                            </div> 
+                        <div class="form-group"  style="float:left; width:50%;">
+                            <label for="car_id">Voiture</label>
+                                <select class="form-control p-0"  name="car_id" required="">  
+                                    <option value="0">toutes les voitures</option>
+                                    @if(!$cars->isEmpty())                                
+                                        @foreach($cars as $car)                     
+                                            <option value="{{$car->id}}">{{$car->model}}</option>
+                                        @endforeach                               
+                                    @endif
+                                </select>
+                        </div>  
                         <div class="form-group m-b-40">
                             <div class="input-group">
                                 <input type="text" class="form-control" readonly>
@@ -94,6 +105,7 @@
                         <th>Nom</th>
                         <th>Email</th>
                         <th>Date création</th>
+                        <th> <i class="fas fa-car"></i></th>
                         <th class="text-nowrap">Action</th>
 
                     </tr>
@@ -106,6 +118,11 @@
                 <td data-th="Nom">{{$user->name}}</td>
                 <td data-th="Email">{{$user->email}}</td>
                 <td data-th="Date création">{{$user->created_at}}</td>
+                @if($user->car!=null)
+                <td data-th="Date création"><img src="{{ asset('storage/images/'.$user->car->photo_url) }}" style="height:50px;width:50px" >{{$user->car->model}}</td>
+                @else
+                <td data-th="Date création">tout</td>
+                @endif
                 <td data-th="Action" class="text-nowrap">
                     <a href="javascript:void(0)" data-id='{{$user->id}}' data-entity='user'  data-url='edit' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
                     |

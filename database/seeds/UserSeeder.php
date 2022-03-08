@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
                'email'=>'driver@gmail.com',               
                'password'=> bcrypt('12345678'),
                'role_id'=>'2',
+               'car_id'=>1,     
             ]
         ];
 

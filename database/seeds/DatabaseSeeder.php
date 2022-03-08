@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
        $this->call(CarburantSeeder::class);
        $this->call(CarSeeder::class);
        $this->call(ActivitySeeder::class);
+        $this->call(ReparationSeeder::class);
     }
 }

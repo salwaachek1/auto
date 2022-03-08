@@ -42,6 +42,20 @@ Route::post('/user/delete/{id}', 'UserController@showModalToDelete');
 Route::post('/destroy-user/{id}', 'UserController@delete');
 Route::post('/user/edit/{id}', 'UserController@showModalToUpdate');
 Route::post('/edit-user', 'UserController@update');
+
+
+//reparation management
+
+Route::get('/reparations', 'ReparationController@index');
+Route::post('/add-reparation/{type_request}', 'ReparationController@create');
+Route::post('/reparation/delete/{id}', 'ReparationController@showModalToDelete');
+Route::post('/destroy-reparation/{id}', 'ReparationController@delete');
+Route::post('/reparation/edit/{id}', 'ReparationController@showModalToUpdate');
+Route::post('/edit-reparation', 'ReparationController@create');
+
+Route::post('/reparation/end/{id}', 'ReparationController@showModalToEnd');
+Route::post('/end-reparation', 'ReparationController@updateDone');
+
 });
 // activity management
 Route::group(['middleware' => ['driver']], function () {

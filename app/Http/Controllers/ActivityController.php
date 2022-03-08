@@ -62,9 +62,12 @@ class ActivityController extends Controller
 
   public function create(ActivityStoreRequest $request,$type_request)
     {
+        $act_check=null;
         $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->latest()->get();
-        if(isset($act_check)){
-            if(($act_check[0]->after_kilos!=$request->before_kilos)||($act_check[0]->after_fuel_amount!=$request->previous_fuel_amount)){
+        if($act_check!=null){
+            $before_kilos=$request->before_kilos+1;
+            $previous_fuel_amount=$request->previous_fuel_amount+1;
+            if(($act_check[0]->after_kilos>=$before_kilos)||($act_check[0]->after_fuel_amount>=$previous_fuel_amount)){
             return back()->with('message'," fausses informations ! veuillez contacter l'administrateur !");
         }
         }
@@ -306,7 +309,7 @@ public function updateDone(ActivityStoreRequest $request)
         $act->save();
         $car_booked=Car::find($act->car_id);
         $car_booked->is_dispo=1;
-        $car_booked->kilos= $car_booked->kilos+$request->after_kilos;
+        $car_booked->kilo= $car_booked->kilo+$request->after_kilos;
         $car_booked->save();
         return back()->with('message', Config::get('constants.sucessful_create')); 
     } 

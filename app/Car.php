@@ -22,4 +22,12 @@ class Car extends Model
     public function activity(){
         return $this->hasMany(Activity::class);
     }
+      public function reparation()
+    {
+        return $this->hasOne('App\Reparation');
+    }
+     public function user()
+    {
+        return $this->hasOne('App\User');
+    }
 }

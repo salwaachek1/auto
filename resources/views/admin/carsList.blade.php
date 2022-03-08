@@ -124,7 +124,8 @@
                 <tbody id="dataTable">
              @if(!$cars->isEmpty())
             @foreach ($cars as $car)
-            <tr>
+            @if ($car->is_working==1)
+            <tr style="border:4px solid green;">
                 <td data-th="Image"> <img src="{{ asset('storage/images/'.$car->photo_url) }}" style="height:50px;width:50px" > </td>
                 <td data-th="Modèle">{{$car->model}}</td>
                 <td data-th="Matricule">{{$car->serial_number}}</td>
@@ -151,6 +152,35 @@
                     <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='statistics' data-entity='car' class='StatModalBtn' > <i class="fas fa-chart-bar text-primary"></i> </a>
                 </td>
             </tr>
+            @else
+            <tr style="border:4px solid red;">
+                <td data-th="Image"> <img src="{{ asset('storage/images/'.$car->photo_url) }}" style="height:50px;width:50px" > </td>
+                <td data-th="Modèle">{{$car->model}}</td>
+                <td data-th="Matricule">{{$car->serial_number}}</td>
+                <td data-th="Lieu">{{$car->place}}</td>
+                <td data-th="Carburant">{{$car->carburant->name}}</td>
+                <td data-th="Kilo">{{$car->kilo}}</td>  
+                @if($car->is_dispo==1)
+                <td data-th="Disponibilité">Disponible</td> 
+                @else
+                <td data-th="Disponibilité">Occupée</td> 
+                @endif
+                @if($car->is_working==1)
+                <td data-th="Etat">Bonne état</td> 
+                @else
+                <td data-th="Etat">En panne</td> 
+                @endif
+                <td data-th="Action" class="text-nowrap">
+                    <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='edit' data-entity='car' class='EditModalBtn'> <i class="fas fa-pencil-alt"></i> </a>
+                    |
+                    <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='delete' data-entity='car' class='DeleteModalBtn'> <i class="fas fa-trash-alt text-danger"></i> </a>
+                    |
+                    <a href="/car/selection/{{$car->id}}" > <i class="fas fa-eye text-primary"></i> </a>
+                    |
+                    <a href="javascript:void(0)" data-id='{{$car->id}}'  data-url='statistics' data-entity='car' class='StatModalBtn' > <i class="fas fa-chart-bar text-primary"></i> </a>
+                </td>
+            </tr>
+            @endif
             @endforeach
             @else
             <tr><td colspan="9" style="text-align:center;">Liste est vide !</td></tr>  
