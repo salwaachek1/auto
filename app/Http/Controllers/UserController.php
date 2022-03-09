@@ -15,8 +15,8 @@ class UserController extends Controller
     use ImageTrait;
    public function index()
     {     
-        $users = User::paginate(10);   
-        $cars=Car::all(); 
+        $users = User::where("deleted_at",NULL)->paginate(10);   
+        $cars=Car::where("deleted_at",NULL)->get(); 
         return view('admin.accountslist')->with(['users'=>$users,'cars'=>$cars]);
     }
 
@@ -66,7 +66,7 @@ class UserController extends Controller
     {
        $user= User::where('id',$id)->get();            
     //    $cars=Car::where("is_working",1)->get();
-        $cars=Car::all();
+        $cars=Car::where("deleted_at",NULL)->get();
         if($user[0]->car!=null){
             $str_car="<option value='".$user[0]->car->id."'>".$user[0]->car->model."</option>";
             $str_car=$str_car."<option value='0'>tout</option>";
@@ -179,7 +179,9 @@ previewImages(this, "div.images-preview-div-3");
       $type="users";
       $default="user.png";
       $this->imageDeleting($path,$type,$default);
-      $user=User::where('id',$id)->delete();  
+      $user= User::find($id); 
+      $user->activities()->delete();
+      $user->delete();  
       return redirect('/users')->with('message', Config::get('constants.sucessful_delete')); 
          
      

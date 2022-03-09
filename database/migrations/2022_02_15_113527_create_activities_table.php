@@ -31,6 +31,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('after_fuel_amount')->nullable();
             $table->text('destination');
             $table->date('returning_date')->nullable();
+            $table->softDeletes();
                 
         });
     }

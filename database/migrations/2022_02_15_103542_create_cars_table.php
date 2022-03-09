@@ -25,6 +25,7 @@ class CreateCarsTable extends Migration
             $table->tinyInteger('is_dispo');
             $table->tinyInteger('is_working');
             $table->text('photo_url');
+            $table->softDeletes();
         });
     }
 

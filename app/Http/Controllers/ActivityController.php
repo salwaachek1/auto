@@ -20,13 +20,19 @@ class ActivityController extends Controller
   public function index()
     {   
         if(Auth::user()->role_id==1){
-        $activities = Activity::latest('id')->paginate(10);    
+        $activities = Activity::where("deleted_at",NULL)->latest('id')->paginate(10);    
         }
         else{
-            $activities = Activity::where('user_id',Auth::user()->id)->latest('id')->paginate(10);
+            $activities = Activity::where('user_id',Auth::user()->id)->where("deleted_at",NULL)->latest('id')->paginate(10);
         }
-        $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
-        $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
+        $occupied_cars=Activity::where("is_done",0)->where("deleted_at",NULL)->select("car_id")->get()->toArray();
+        if(Auth::user()->car_id==null){
+            $cars=Car::whereNotIn("id",$occupied_cars)->where("deleted_at",NULL)->where("is_working",1)->get();
+        }
+        else{
+            $cars=Car::where("id",Auth::user()->car_id)->where("deleted_at",NULL)->get();
+        }
+        
         $state="";
         if($cars->isEmpty()){
             $state="disabled";
@@ -42,16 +48,16 @@ class ActivityController extends Controller
     public function getSelectedActivity($type,$id)
     {   
         if($type=="selection"){ // if true it will returns activities that belongs to a specific car
-        $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
+        $activities =Activity::where('car_id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }
         else if($type=="longest-distance"){ // if true it will returns an activity through activity's ID
-        $activities =Activity::where('id',$id)->latest('id')->paginate(15);
+        $activities =Activity::where('id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }
         else{ // return activities that belongs to a specific user
-            $activities =Activity::where('user_id',$id)->latest('id')->paginate(15);
+            $activities =Activity::where('user_id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }        
-        $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
-        $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
+        $occupied_cars=Activity::where("is_done",0)->where("deleted_at",NULL)->select("car_id")->get()->toArray();
+        $cars=Car::whereNotIn("id",$occupied_cars)->where("deleted_at",NULL)->where("is_working",1)->get();
         $state="";
         if($cars->isEmpty()){
             $state="disabled";
@@ -63,8 +69,8 @@ class ActivityController extends Controller
   public function create(ActivityStoreRequest $request,$type_request)
     {
         $act_check=null;
-        $act_check= Activity::where("car_id",$request->car_id)->where("is_done",1)->latest()->get();
-        if($act_check!=null){
+        $act_check= Activity::where("car_id",$request->car_id)->where("deleted_at",NULL)->where("is_done",1)->latest()->get();
+        if(count($act_check)>0){
             $before_kilos=$request->before_kilos+1;
             $previous_fuel_amount=$request->previous_fuel_amount+1;
             if(($act_check[0]->after_kilos>=$before_kilos)||($act_check[0]->after_fuel_amount>=$previous_fuel_amount)){
@@ -175,8 +181,8 @@ class ActivityController extends Controller
     $default="noimage.jpg";
         $this->imageDeleting($path_before,$type,$default);
         $this->imageDeleting($path_after,$type,$default);
-      $act=Activity::where('id',$id)->delete();  
-     return true;
+    $act->delete();  
+    return true;
         
      
     }
@@ -207,7 +213,7 @@ class ActivityController extends Controller
     <input type="hidden" name="_token" value="' . csrf_token() . '" />
                         <div>
                             <div class="form-group " style="float:left; width:50%;">
-                                <label for="expenses">Dépenses</label>
+                                <label for="expenses">Dépenses (optionel) </label>
                                 <input type="text" class="form-control" name="expenses"   value="'.$act[0]->expenses.'" >
                             </div>
                             <div class="form-group" style="float:left; width:50%;">
@@ -217,7 +223,7 @@ class ActivityController extends Controller
                         </div > 
                         <div>
                             <div class="form-group " style="float:left; width:50%;">
-                                <label for="fuel">carburant acheté</label>
+                                <label for="fuel">carburant acheté (optionel)</label>
                                 <input type="number" class="form-control" name="fuel"  value="'.$act[0]->fuel.'"   ><span class="highlight"></span> <span class="bar"></span>
                             </div>
                             <div class="form-group" style="float:left; width:50%;">
@@ -285,8 +291,8 @@ public function updateDone(ActivityStoreRequest $request)
         $fileNameToStore = "";
         $validated = $request->validate([
                 'after_kilos' => 'required',
-                'expenses' => 'required',
-                'fuel' => 'required',
+                // 'expenses' => 'required',
+                // 'fuel' => 'required',
                 'after_fuel_amount' => 'required',
                 'after_photo_url' => 'image|mimes:jpg,jpeg,png,gif,svg|max:2048'
                 ]);
@@ -302,8 +308,12 @@ public function updateDone(ActivityStoreRequest $request)
         $act->after_photo_url = $fileNameToStore;
         $act->after_kilos = $request->after_kilos;
         $act->after_fuel_amount=$request->after_fuel_amount;
-        $act->expenses= $request->expenses;
-        $act->fuel= $request->fuel;
+        if(!empty($request->expenses)){
+            $act->expenses= $request->expenses;
+        }
+        if(!empty($request->fuel)){
+            $act->fuel= $request->fuel;
+        }        
         $act->is_done = 1;
         $act->returning_date=now();
         $act->save();

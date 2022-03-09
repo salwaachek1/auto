@@ -3,9 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Activity extends Model
 {
+   use SoftDeletes;
    protected $table = 'activities';
      protected $fillable = [
         'user_id','car_id','is_done','before_photo_url','after_photo_url','before_kilos','after_kilos','expenses','fuel','previous_fuel_amount','after_fuel_amount','destination','returning_day'

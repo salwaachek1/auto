@@ -25,6 +25,7 @@ class CreateReparationsTable extends Migration
             $table->tinyInteger('is_done');
             $table->date('date_out')->nullable();
             $table->string('phone');
+            $table->softDeletes();
         });
     }
 

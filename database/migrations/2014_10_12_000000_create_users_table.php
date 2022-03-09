@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->Integer('car_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

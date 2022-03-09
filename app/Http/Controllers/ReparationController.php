@@ -22,10 +22,10 @@ class ReparationController extends Controller
   public function index()
     {   
       
-        $reparations = Reparation::latest('id')->paginate(10);
-        $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
-        $broke_down_cars=Reparation::where("is_done",0)->select("car_id")->get()->toArray();
-        $cars=Car::whereNotIn("id",$occupied_cars)->whereNotIn("id",$broke_down_cars)->where("is_working",1)->get();
+        $reparations = Reparation::latest('id')->where("deleted_at",NULL)->paginate(10);
+        $occupied_cars=Activity::where("is_done",0)->where("deleted_at",NULL)->select("car_id")->get()->toArray();
+        $broke_down_cars=Reparation::where("is_done",0)->where("deleted_at",NULL)->select("car_id")->get()->toArray();
+        $cars=Car::whereNotIn("id",$occupied_cars)->whereNotIn("id",$broke_down_cars)->where("is_working",1)->where("deleted_at",NULL)->get();
         $state="";
         if($cars->isEmpty()){
             $state="disabled"; 
@@ -41,16 +41,16 @@ class ReparationController extends Controller
     public function getSelectedActivity($type,$id)
     {   
         if($type=="selection"){ // if true it will returns activities that belongs to a specific car
-        $activities =Activity::where('car_id',$id)->latest('id')->paginate(15);
+        $activities =Activity::where('car_id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }
         else if($type=="longest-distance"){ // if true it will returns an activity through activity's ID
-        $activities =Activity::where('id',$id)->latest('id')->paginate(15);
+        $activities =Activity::where('id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }
         else{ // return activities that belongs to a specific user
-            $activities =Activity::where('user_id',$id)->latest('id')->paginate(15);
+            $activities =Activity::where('user_id',$id)->where("deleted_at",NULL)->latest('id')->paginate(15);
         }        
         $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
-        $cars=Car::whereNotIn("id",$occupied_cars)->where("is_working",1)->get();
+        $cars=Car::whereNotIn("id",$occupied_cars)->where("deleted_at",NULL)->where("is_working",1)->get();
         $state="";
         if($cars->isEmpty()){
             $state="disabled";
@@ -130,19 +130,12 @@ class ReparationController extends Controller
     }
     public function delete($id)
     {
-    $act= Activity::where('id',$id)->get();
-    if($act[0]->is_done==0) {
+    $rep= Reparation::where('id',$id)->get();
+    if($rep[0]->is_done==0) {
         return false;
     }
-    $path_before=$act[0]->before_photo_url;
-    $path_after=$act[0]->after_photo_url;
-    $type="activities";
-    $default="noimage.jpg";
-        $this->imageDeleting($path_before,$type,$default);
-        $this->imageDeleting($path_after,$type,$default);
-      $act=Activity::where('id',$id)->delete();  
-     return true;
-        
+     $rep->delete();  
+     return true;       
      
     }
 
@@ -218,9 +211,9 @@ public function updateDone(ReparationStoreRequest $request)
     public function showModalToUpdate($id)
     {
        $rep = Reparation::where("id",$id)->get();
-       $occupied_cars=Activity::where("is_done",0)->select("car_id")->get()->toArray();
+       $occupied_cars=Activity::where("is_done",0)->where("deleted_at",NULL)->select("car_id")->get()->toArray();
        $broke_down_cars=Reparation::where("is_done",0)->select("car_id")->get()->toArray();
-       $cars=Car::whereNotIn("id",$occupied_cars)->whereNotIn("id",$broke_down_cars)->where("is_working",1)->get();
+       $cars=Car::whereNotIn("id",$occupied_cars)->where("deleted_at",NULL)->whereNotIn("id",$broke_down_cars)->where("is_working",1)->get();
        $str_car="<option value='".$rep[0]->car->id."'>".$rep[0]->car->model."</option>";
        foreach($cars as $car){
             if($rep[0]->car->id!==$car->id){

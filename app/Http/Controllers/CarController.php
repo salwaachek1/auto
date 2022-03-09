@@ -17,7 +17,7 @@ class CarController extends Controller
   public function index()
     {     
         $carburants = Carburant::get();            
-        $cars = Car::paginate(10);        
+        $cars = Car::where("deleted_at",NULL)->paginate(10);        
         return view('admin.carslist')->with(['carburants' => $carburants,'cars'=>$cars]);
     }
  public function showStatisticsModal($id)
@@ -165,7 +165,10 @@ class CarController extends Controller
       $type="images";
       $default="noimage.jpg";
       $this->imageDeleting($path,$type,$default);  
-      $car=Car::where('id',$id)->delete();  
+      $car= Car::find($id); 
+      $car->activity()->delete();
+      $car->reparation()->delete();
+      $car->delete();  
       return redirect('/cars')->with('message', Config::get('constants.sucessful_delete')); 
          
      
